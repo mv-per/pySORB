@@ -1,1 +1,5 @@
 .vscode
+GNUPLOT.h
+*.exe
+*.cpp
+*.c

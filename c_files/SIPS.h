@@ -14,6 +14,22 @@ double calculate_sips(double *P, double* param )
 }
 
 
+/*
+    param = [n_max_0, QSI, b_inf, Q, n_0, alpha]
+
+*/
+double calculate_sips_T(double *P, double *T, double* param )
+{
+    double b = sips_calc_b(param[2], param[3], *T);
+    double n_max = sips_n_max_T(param[0], param[1], *T);
+    double inverse_n = sips_inverse_n(param[4], param[5], *T);
+
+    // printf("%f \n", (n_max*pow(b * *P, inverse_n))/(1. + pow(b * *P, inverse_n)));
+    return  (n_max*pow(b * *P, inverse_n))/(1. + pow(b * *P, inverse_n));
+}
+
+
+
 double minimize_sips(double P, double n_exp, double* param){
     double n_calc = calculate_sips(&P, param);
     // printf(%f, n_calc);
