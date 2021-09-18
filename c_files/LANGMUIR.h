@@ -8,46 +8,18 @@
 
 /*
 	Returns single n_calc using Langmuir
+    param[0] = n_i_max
+    param[1] = b
 */
-double CalculateLangmuir(double *P, double &n_i_max, double &b)
+double calculate_langmuir(double *P, double* param)// double &n_i_max, double &b)
 {
-    return n_i_max * b * *P / (1.0 + b * *P);
+    return param[0] * param[1] * *P / (1.0 + param[1] * *P);
 }
 
-/*
-	Returns partial n_calc and total n_calc using Extended Langmuir
-*/
-// double * CalculateExtendedLangmuir(vector<vector<double>>& param, vector<double>& y, double *P, int *ncomp)
-// {
-//     int i;
-//     double *res = (double *) malloc( *ncomp+1 * sizeof( double ) );
-
-//     double nT = 0.;
-//     double sum1 = 0.;
-//     double nmix = 0.;
-//     for (i = 0; i < *ncomp; i++){
-//         sum1 += param[i][1] * *P * y[i];
-//         nmix += param[i][0]*y[i];
-//     }
-
-//     for (i = 0; i < *ncomp; i++){
-//         res[i] = nmix * param[i][1] * *P * y[i] / (1. + sum1);
-//         nT += res[i];
-//     }
-
-//     for (i = 0; i < *ncomp; i++){
-//         res[i] /= nT;
-//     }
-    
-//     res[*ncomp] = nT;
-
-//     return res;
-// }
-
-double MinimizeLANGMUIR(double P, double n_exp, double param[]){
-    double n_calc = CalculateLangmuir(&P, param[0],param[1]);
+double minimize_langmuir(double P, double n_exp, double* param){
+    double n_calc = calculate_langmuir(&P, param);
     // printf(%f, n_calc);
-    return fabs(n_exp-n_calc);
+    return (fabs(n_exp-n_calc)/n_exp)*1000.;
 }
 
 

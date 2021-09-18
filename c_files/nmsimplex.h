@@ -51,32 +51,32 @@ void initialize_simplex(double **v, double start[], double scale, int n)
   }
 }
 
-/* print out the initial values */
-void print_initial_simplex(double **v, double *f, int n)
-{
-  int i,j;
+// /* print out the initial values */
+// void print_initial_simplex(double **v, double *f, int n)
+// {
+//   int i,j;
   
-  printf("Initial Values\n");
-  for (j=0;j<=n;j++) {
-    for (i=0;i<n;i++) {
-      printf("%f, ",v[j][i]);
-    }
-    printf("value %f\n",f[j]);
-  }
-}
+//   printf("Initial Values\n");
+//   for (j=0;j<=n;j++) {
+//     for (i=0;i<n;i++) {
+//       printf("%f, ",v[j][i]);
+//     }
+//     printf("value %f\n",f[j]);
+//   }
+// }
 
 /* print out the value at each iteration */
-void print_iteration(double **v, double *f, int n, int itr)
-{
-  int i,j;
+// void print_iteration(double **v, double *f, int n, int itr)
+// {
+//   int i,j;
   
-  printf("Iteration %d\n",itr);
-  for (j=0;j<=n;j++) {
-    for (i=0;i<n;i++) {
-      printf("%f %f\n",v[j][i],f[j]);
-    }
-  }
-}
+//   printf("Iteration %d\n",itr);
+//   for (j=0;j<=n;j++) {
+//     for (i=0;i<n;i++) {
+//       printf("%f %f\n",v[j][i],f[j]);
+//     }
+//   }
+// }
 
 /* find the index of the largest value */
 int vg_index(double *f, int vg, int n)
@@ -191,7 +191,7 @@ double * simplex(double (*objfunc)(double[]), double start[],int n, double EPSIL
   k = n+1;
 	
   /* print out the initial values */
-  print_initial_simplex(v,f,n);
+  // print_initial_simplex(v,f,n);
 
 
   /* begin the main loop of the minimization */
