@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(This cClassicIsotherms)
+set(This classicIsotherms)
 
 project(${This} VERSION 0.1.0 )
 

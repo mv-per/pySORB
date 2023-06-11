@@ -5,14 +5,14 @@
 #include <vector>
 #include <functional>
 
-class ClassicIsotherm
+class ClassicIsotherms
 {
 public:
     /**
-     * @brief Constructs a ClassicIsotherm object and initializes the IsothermInvoker based on the given isotherm name.
+     * @brief Constructs a ClassicIsotherms object and initializes the IsothermInvoker based on the given isotherm name.
      * @param isotherm The name of the isotherm to be used.
      */
-    ClassicIsotherm(std::string isotherm);
+    ClassicIsotherms(std::string isotherm);
 
     /**
      * @brief Calculates the loading for the given pressure, temperature, and parameters.

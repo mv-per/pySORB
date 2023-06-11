@@ -4,15 +4,15 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(ClassicIsotherm, m)
+PYBIND11_MODULE(ClassicIsotherms, m)
 {
-    py::class_<ClassicIsotherm>(m, "ClassicIsotherm")
+    py::class_<ClassicIsotherms>(m, "ClassicIsotherms")
         .def(py::init<std::string>())
-        .def("GetLoading", &ClassicIsotherm::GetLoading, "Calculate loading",
+        .def("get_loading", &ClassicIsotherms::GetLoading, "Calculate loading",
              py::arg("Pressure"), py::arg("Temperature"), py::arg("Parameters"))
-        .def("GetLoadings", &ClassicIsotherm::GetLoadings, "Calculate loadings",
+        .def("get_loadings", &ClassicIsotherms::GetLoadings, "Calculate loadings",
              py::arg("Pressures"), py::arg("Temperature"), py::arg("Parameters"))
-        .def("GetDeviation", &ClassicIsotherm::GetDeviation, "Calculate deviation",
+        .def("get_deviation", &ClassicIsotherms::GetDeviation, "Calculate deviation",
              py::arg("Pressures"), py::arg("ExperimentalLoadings"), py::arg("Temperature"),
              py::arg("Parameters"), py::arg("DeviationEquation"));
 }

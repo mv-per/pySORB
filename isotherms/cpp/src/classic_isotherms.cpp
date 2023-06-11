@@ -3,17 +3,17 @@
 #include "deviation_functions.h"
 #include "_isotherms.h"
 
-ClassicIsotherm::ClassicIsotherm(std::string isotherm)
+ClassicIsotherms::ClassicIsotherms(std::string isotherm)
 {
     this->IsothermInvoker = this->GetIsothermInvoker(isotherm);
 }
 
-double ClassicIsotherm::GetLoading(double Pressure, double Temperature, std::vector<double> Parameters)
+double ClassicIsotherms::GetLoading(double Pressure, double Temperature, std::vector<double> Parameters)
 {
     return this->IsothermInvoker(Pressure, Parameters);
 }
 
-std::vector<double> ClassicIsotherm::GetLoadings(std::vector<double> Pressures, double Temperature, std::vector<double> Parameters)
+std::vector<double> ClassicIsotherms::GetLoadings(std::vector<double> Pressures, double Temperature, std::vector<double> Parameters)
 {
     std::vector<double> CalculatedLoadings(Pressures.size(), 0.0);
 
@@ -24,7 +24,7 @@ std::vector<double> ClassicIsotherm::GetLoadings(std::vector<double> Pressures, 
     return CalculatedLoadings;
 }
 
-double ClassicIsotherm::GetDeviation(std::vector<double> Pressures, std::vector<double> ExperimentalLoadings, double Temperature, std::vector<double> Parameters, std::string DeviationEquation)
+double ClassicIsotherms::GetDeviation(std::vector<double> Pressures, std::vector<double> ExperimentalLoadings, double Temperature, std::vector<double> Parameters, std::string DeviationEquation)
 {
     std::vector<double> CalculatedLoadings = this->GetLoadings(Pressures, Temperature, Parameters);
     std::function<double(std::vector<double>, std::vector<double>)> DeviationInvoker = this->GetDeviationInvoker(DeviationEquation, Parameters.size());
@@ -32,7 +32,7 @@ double ClassicIsotherm::GetDeviation(std::vector<double> Pressures, std::vector<
     return DeviationInvoker(ExperimentalLoadings, CalculatedLoadings);
 }
 
-std::function<double(double, std::vector<double>)> ClassicIsotherm::GetIsothermInvoker(std::string isotherm)
+std::function<double(double, std::vector<double>)> ClassicIsotherms::GetIsothermInvoker(std::string isotherm)
 {
     if (isotherm == "langmuir")
     {
@@ -89,7 +89,7 @@ std::function<double(double, std::vector<double>)> ClassicIsotherm::GetIsothermI
     }
 }
 
-std::function<double(std::vector<double>, std::vector<double>)> ClassicIsotherm::GetDeviationInvoker(std::string DeviationEquation, double NumberOfParameters)
+std::function<double(std::vector<double>, std::vector<double>)> ClassicIsotherms::GetDeviationInvoker(std::string DeviationEquation, double NumberOfParameters)
 {
 
     if (DeviationEquation == "ARE")
