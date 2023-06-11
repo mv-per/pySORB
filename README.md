@@ -13,7 +13,7 @@ You can install ClassicIsotherms using pip:
 ## Usage
 
 ```python
-    import ClassicIsotherms
+    from ClassicIsotherms import ClassicIsotherms
 
     # Create an instance of ClassicIsotherm
     isotherm = ClassicIsotherms("freundlich")

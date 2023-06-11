@@ -8,8 +8,7 @@
     3 - 10.1021/la800725s
 */
 
-#include <vector>;
-#include <cmath>;
+#include "deviation_functions.h"
 
 double GetSSEDeviation(std::vector<double> ExperimentalLoadings, std::vector<double> CalculatedLoadings, double NumberOfParameters)
 {

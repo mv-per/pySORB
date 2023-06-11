@@ -9,7 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 
 #  Project
-set(This pyPTA)
+set(This ClassicIsotherms)
 
 project(${This})
 
@@ -25,7 +25,7 @@ pybind11_add_module(
     ${This} 
     ${Sources} 
     ${Headers} 
-    src/module.cpp)
+    isotherms/module.cpp)
 
 target_link_libraries(${This} PUBLIC)
 

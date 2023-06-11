@@ -1,0 +1,5 @@
+pybind11
+setuptools
+wheel
+ninja
+cmake>=3.12

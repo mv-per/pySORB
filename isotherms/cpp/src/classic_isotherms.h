@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include "deviation_functions.h"
+#include "_isotherms.h"
 
 class ClassicIsotherms
 {

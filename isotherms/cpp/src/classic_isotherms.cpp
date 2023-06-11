@@ -1,7 +1,4 @@
-#include "classic_isotherm.h"
-
-#include "deviation_functions.h"
-#include "_isotherms.h"
+#include "classic_isotherms.h"
 
 ClassicIsotherms::ClassicIsotherms(std::string isotherm)
 {

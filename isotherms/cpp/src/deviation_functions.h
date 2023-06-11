@@ -3,8 +3,8 @@
  * @brief Contains functions for calculating different types of deviations.
  */
 
-#ifndef ERRORS_H
-#define ERRORS_H
+#ifndef DEVIATION_FUNCTIONS_H
+#define DEVIATION_FUNCTIONS_H
 
 #include <vector>
 #include <cmath>
