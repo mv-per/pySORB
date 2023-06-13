@@ -1,20 +1,23 @@
-#ifndef CLASSIC_ISOTHERM_H
-#define CLASSIC_ISOTHERM_H
+
+
+#ifndef BASE_ISOTHERM_MODEL_H
+#define BASE_ISOTHERM_MODEL_H
 
 #include <string>
 #include <vector>
 #include <functional>
 #include "deviation_functions.h"
-#include "_isotherms.h"
 
-class ClassicIsotherms
+#include "utils.h"
+
+class BaseIsothermModel
 {
 public:
     /**
-     * @brief Constructs a ClassicIsotherms object and initializes the IsothermInvoker based on the given isotherm name.
+     * @brief Constructs a BaseIsothermModel object and initializes the IsothermInvoker based on the given isotherm name.
      * @param isotherm The name of the isotherm to be used.
      */
-    ClassicIsotherms(std::string isotherm);
+    BaseIsothermModel(std::string model);
 
     /**
      * @brief Calculates the loading for the given pressure, temperature, and parameters.
@@ -45,26 +48,16 @@ public:
      */
     double GetDeviation(std::vector<double> Pressures, std::vector<double> ExperimentalLoadings, double Temperature, std::vector<double> Parameters, std::string DeviationEquation);
 
-private:
-    double Temperature;
-    std::function<double(double, std::vector<double>)> IsothermInvoker;
-    std::function<double(std::vector<double>, std::vector<double>)> DeviationInvoker;
+protected:
+    std::function<double(double, std::vector<double>)> LoadingInvoker;
 
     /**
-     * @brief Returns the appropriate isotherm invoker function based on the given isotherm name.
+     * @brief Returns the appropriate loading invoker function based on the given model name.
      * @param isotherm The name of the isotherm.
      * @return The corresponding isotherm invoker function.
      * @throw std::invalid_argument If the isotherm is not found or defined.
      */
-    std::function<double(double, std::vector<double>)> GetIsothermInvoker(std::string isotherm);
-
-    /**
-     * @brief Returns the appropriate deviation invoker function based on the given deviation function name.
-     * @param DeviationEquation The name of the deviation function.
-     * @param NumberOfParameters The number of parameters.
-     * @return The corresponding deviation invoker function.
-     */
-    std::function<double(std::vector<double>, std::vector<double>)> GetDeviationInvoker(std::string DeviationEquation, double NumberOfParameters);
+    std::function<double(double, std::vector<double>)> GetLoadingInvoker(std::string isotherm);
 };
 
 #endif
