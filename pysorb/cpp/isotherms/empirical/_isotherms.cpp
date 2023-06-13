@@ -39,3 +39,8 @@ double keller_staudt_toth(double Pressure, std::vector<double> Parameters)
     double alpha = (1. + Parameters[2] * Parameters[3]) / (1.0 + Parameters[3] * Pressure);
     return (Parameters[0] * Parameters[2] * Parameters[1] * Pressure / std::pow(1. + std::pow(Parameters[1] * Pressure, alpha), 1. / alpha));
 }
+
+double jensen_seaton(double Pressure, std::vector<double> Parameters)
+{
+    return Parameters[0] * Pressure * pow(1. + pow(Parameters[0] * Pressure / (Parameters[1] * (1. + Parameters[2] * Pressure)), Parameters[3]), -1. / Parameters[3]);
+}

@@ -65,4 +65,12 @@ double unilan(double Pressure, std::vector<double> Parameters);
  */
 double keller_staudt_toth(double Pressure, std::vector<double> Parameters);
 
+/**
+ * @brief Calculates the loading using the Jensen-Seaton isotherm.
+ * @param Pressure The pressure value.
+ * @param Parameters The parameters for the isotherm. [K , a, kappa, c]
+ * @return The calculated loading.
+ */
+double jensen_seaton(double Pressure, std::vector<double> Parameters);
+
 #endif
