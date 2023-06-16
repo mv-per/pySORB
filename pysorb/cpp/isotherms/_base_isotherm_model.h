@@ -13,6 +13,7 @@
 class BaseIsothermModel
 {
 public:
+    BaseIsothermModel(){};
     /**
      * @brief Constructs a BaseIsothermModel object and initializes the IsothermInvoker based on the given isotherm name.
      * @param isotherm The name of the isotherm to be used.
@@ -49,7 +50,7 @@ public:
     double GetDeviation(std::vector<double> Pressures, std::vector<double> ExperimentalLoadings, double Temperature, std::vector<double> Parameters, std::string DeviationEquation);
 
 protected:
-    std::function<double(double, std::vector<double>)> LoadingInvoker;
+    std::function<double(double, double, std::vector<double>)> LoadingInvoker;
 
     /**
      * @brief Returns the appropriate loading invoker function based on the given model name.
@@ -57,7 +58,7 @@ protected:
      * @return The corresponding isotherm invoker function.
      * @throw std::invalid_argument If the isotherm is not found or defined.
      */
-    std::function<double(double, std::vector<double>)> GetLoadingInvoker(std::string isotherm);
+    std::function<double(double, double, std::vector<double>)> GetLoadingInvoker(std::string isotherm);
 };
 
 #endif

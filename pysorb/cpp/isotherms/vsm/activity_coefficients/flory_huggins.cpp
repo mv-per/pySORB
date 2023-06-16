@@ -15,7 +15,7 @@ void FHPcalc(int n, point_t *point, const void *arg)
     point->fx = std::fabs(params->P - Pcalc) / params->P;
 }
 
-double GetLoadingFloryHuggins(double P, std::vector<double> parameters)
+double GetLoadingFloryHuggins(double P, double T, std::vector<double> parameters)
 {
     // Initial loading estimate using langmuir;
     double loading_estimate = langmuir(P, {parameters[0], parameters[1]}) * .8;

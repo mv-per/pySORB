@@ -1,33 +1,28 @@
 
 #include "vsm.h"
 
-// VacancySolutionMethod::VacancySolutionMethod(std::string model)
-// {
-//     this->LoadingInvoker = this->GetLoadingInvoker(model);
-// }
-
-std::function<double(double, std::vector<double>)> VacancySolutionMethod::GetLoadingInvoker(std::string model)
+std::function<double(double, double, std::vector<double>)> VacancySolutionMethod::GetLoadingInvoker(std::string model)
 {
 
     if (model == "nrtl")
     {
-        return [=](double pressure, std::vector<double> parameters)
+        return [=](double pressure, double temperature, std::vector<double> parameters)
         {
-            return GetLoadingNRTL(pressure, parameters);
+            return GetLoadingNRTL(pressure, temperature, parameters);
         };
     }
     else if (model == "wilson")
     {
-        return [=](double pressure, std::vector<double> parameters)
+        return [=](double pressure, double temperature, std::vector<double> parameters)
         {
-            return GetLoadingWILSON(pressure, parameters);
+            return GetLoadingWILSON(pressure, temperature, parameters);
         };
     }
     else if (model == "flory-huggins")
     {
-        return [=](double pressure, std::vector<double> parameters)
+        return [=](double pressure, double temperature, std::vector<double> parameters)
         {
-            return GetLoadingFloryHuggins(pressure, parameters);
+            return GetLoadingFloryHuggins(pressure, temperature, parameters);
         };
     }
     else

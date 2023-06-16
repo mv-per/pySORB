@@ -24,87 +24,103 @@
  * Journal of Colloid and Interface Science, 201(2), 146-157.
  *
  */
-class PurePTA
-{
-	call_mono_get_load Loader;
-	Adsorbent adsorbent;
-	Fluid fluid;
+// class PurePTA
+// {
+// 	call_mono_get_load Loader;
+// 	Adsorbent adsorbent;
+// 	Fluid Fluid;
 
-public:
-	std::string Potential;
-	std::size_t NumberOfLayers;
-	std::string EquationOfState;
-	std::string IsothermType;
+// public:
+// 	std::string Potential;
+// 	std::size_t NumberOfLayers;
+// 	std::string EquationOfState;
+// 	std::string IsothermType;
 
-	~PurePTA() {}
-	/**
-	 * PurePTA
-	 *
-	 * @param potential Name of the potential to be used in the calculations
-	 * @param equation_of_state Name of the Equation of State to be used in the calculations
-	 * @param isotherm_type Type of the isotherm to be used in calculations (excess | absolute).
-	 * @param num_of_layers Number of layers from the solid to Gibbs phase.
-	 */
-	PurePTA(std::string potential, std::string equation_of_state, std::string isotherm_type, std::size_t num_of_layers);
+// 	~PurePTA() {}
+// 	/**
+// 	 * PurePTA
+// 	 *
+// 	 * @param potential Name of the potential to be used in the calculations
+// 	 * @param equation_of_state Name of the Equation of State to be used in the calculations
+// 	 * @param isotherm_type Type of the isotherm to be used in calculations (excess | absolute).
+// 	 * @param num_of_layers Number of layers from the solid to Gibbs phase.
+// 	 */
+// 	PurePTA(std::string potential, std::string equation_of_state, std::string isotherm_type, std::size_t num_of_layers);
 
-	/**
-	 * Get the calculated loading in a specific pressure
-	 *
-	 * @param P Pressure of the fluid
-	 * @param T Temperature of the Fluid
-	 * @param potential_params Params of the Adsorption Potential for this fluid
-	 * @param fluid Fluid properties.
-	 * @return Calculated adsorbed loading
-	 */
-	double GetLoading(double P, double T, std::vector<double> potential_params, Fluid fluid);
-	/**
-	 * Get the calculated pressure in a specific loading
-	 *
-	 * @param n loading of the fluid
-	 * @param T Temperature of the Fluid
-	 * @param potential_params Params of the Adsorption Potential for this fluid
-	 * @param fluid Fluid properties.
-	 * @return Calculated adsorbed loading
-	 */
-	double GetPressure(double n, double T, std::vector<double> potential_params, Fluid fluid, double P_estimate_);
-	/**
-	 * Get the calculated loading for different pressures
-	 *
-	 * @param P List of pressure points to get loading
-	 * @param T Temperature of the Fluid
-	 * @param potential_params Params of the Adsorption Potential for this fluid
-	 * @param fluid Fluid properties.
-	 * @return List of calculated loadings
-	 */
-	std::vector<double> GetLoadings(std::vector<double> P, double T, std::vector<double> potential_params, Fluid fluid);
-	/**
-	 * Get the deviation between calculated experimental loadings
-	 *
-	 * @param P List of pressure points to get loading
-	 * @param T Temperature of the Fluid
-	 * @param potential_params Params of the Adsorption Potential for this fluid
-	 * @param fluid Fluid properties.
-	 * @return List of calculated loadings
-	 */
-	double GetDeviationRange(std::string deviation_type,
-							 std::vector<double> loading_exp, std::vector<double> P, double T, std::vector<double> potential_params, Fluid fluid);
+// 	/**
+// 	 * Get the calculated loading in a specific pressure
+// 	 *
+// 	 * @param P Pressure of the Fluid
+// 	 * @param T Temperature of the Fluid
+// 	 * @param potential_params Params of the Adsorption Potential for this Fluid
+// 	 * @param Fluid Fluid properties.
+// 	 * @return Calculated adsorbed loading
+// 	 */
+// 	double GetLoading(double P, double T, std::vector<double> potential_params, Fluid Fluid);
+// 	/**
+// 	 * Get the calculated pressure in a specific loading
+// 	 *
+// 	 * @param n loading of the Fluid
+// 	 * @param T Temperature of the Fluid
+// 	 * @param potential_params Params of the Adsorption Potential for this Fluid
+// 	 * @param Fluid Fluid properties.
+// 	 * @return Calculated adsorbed loading
+// 	 */
+// 	double GetPressure(double n, double T, std::vector<double> potential_params, Fluid Fluid, double P_estimate_);
+// 	/**
+// 	 * Get the calculated loading for different pressures
+// 	 *
+// 	 * @param P List of pressure points to get loading
+// 	 * @param T Temperature of the Fluid
+// 	 * @param potential_params Params of the Adsorption Potential for this Fluid
+// 	 * @param Fluid Fluid properties.
+// 	 * @return List of calculated loadings
+// 	 */
+// 	std::vector<double> GetLoadings(std::vector<double> P, double T, std::vector<double> potential_params, Fluid Fluid);
+// 	/**
+// 	 * Get the deviation between calculated experimental loadings
+// 	 *
+// 	 * @param P List of pressure points to get loading
+// 	 * @param T Temperature of the Fluid
+// 	 * @param potential_params Params of the Adsorption Potential for this Fluid
+// 	 * @param Fluid Fluid properties.
+// 	 * @return List of calculated loadings
+// 	 */
+// 	double GetDeviationRange(std::string deviation_type,
+// 							 std::vector<double> loading_exp, std::vector<double> P, double T, std::vector<double> potential_params, Fluid Fluid);
 
-	void SetAdsorbent(Adsorbent properties);
+// 	void SetAdsorbent(Adsorbent properties);
 
-private:
-	bool AdsorbentConfigured = false;
+// private:
+// 	bool AdsorbentConfigured = false;
 
-	call_mono_get_load GetLoadingFunction();
+// 	call_mono_get_load GetLoadingFunction();
 
-	std::function<mono_eos(double, double)> GetEquationOfStateInvoker(Fluid fluid_);
+std::function<mono_eos(double, double)> GetPureEquationOfStateInvoker(std::string equation_of_state, Fluid fluid_);
 
-	std::function<double(double)> GetAdsorptionPotentialInvoker(std::vector<double> potential_params, Fluid fluid, Adsorbent solid_properties);
-	/**
-	 * Get the potential function based on its energy interation and temperature
-	 *
-	 */
-	double GetDRAAdsorbedAmout(double bulk_pressure, double temperature, std::vector<double> potential_params, call_mono_eos eos, call_potential get_potential);
-	double GetLJAdsorbedAmout(double Pb, double T, std::vector<double> potential_params, call_mono_eos eos, call_potential get_potential);
-};
+std::function<double(double, std::vector<double>)> GetPureAdsorptionPotentialInvoker(std::string potential, Fluid Fluid, Adsorbent solid_properties);
+/**
+ * Get the potential function based on its energy interation and temperature
+ *
+ */
+double GetDRAPureLoading(double BulkPressure,
+						 double Temperature,
+						 std::vector<double> Parameters,
+						 call_mono_eos EquationOfStateInvoker,
+						 call_potential PotentialInvoker,
+						 Fluid Fluid,
+						 std::size_t NumberOfLayers,
+						 std::string IsothermType,
+						 std::string Potential);
+double GetLJPureLoading(double BulkPressure,
+						double Temperature,
+						std::vector<double> Parameters,
+						call_mono_eos EquationOfStateInvoker,
+						call_potential PotentialInvoker,
+						Fluid Fluid,
+						std::size_t NumberOfLayers,
+						std::string IsothermType,
+						std::string Potential);
+// };
 
 #endif

@@ -25,7 +25,7 @@ void OptimizePressureNRTL(int n, point_t *point, const void *arg)
 Parameters = [n_max, b, tao_iv, tao_vi, alpha_iv]
 
 */
-double GetLoadingNRTL(double P, std::vector<double> parameters)
+double GetLoadingNRTL(double P, double T, std::vector<double> parameters)
 {
     // Initial loading estimate using langmuir;
     double loading_estimate = langmuir(P, {parameters[0], parameters[1]}) * .8;

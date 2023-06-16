@@ -27,7 +27,7 @@ public:
      * @return The corresponding loading invoker function.
      * @throw std::invalid_argument If the model is not found or defined.
      */
-    std::function<double(double, std::vector<double>)> GetLoadingInvoker(std::string model);
+    std::function<double(double, double, std::vector<double>)> GetLoadingInvoker(std::string model);
 };
 
 #endif

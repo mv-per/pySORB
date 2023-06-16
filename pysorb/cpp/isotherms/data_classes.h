@@ -12,7 +12,7 @@ public:
     double CriticalPressure;
     double CriticalTemperature;
     double AccentricFactor;
-    
+
     double CriticalCompressibility = 0;
     double LennardJonnesDiameter = 0;
     ~Fluid() {}

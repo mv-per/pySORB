@@ -7,6 +7,6 @@
 #include "../../empirical/_isotherms.h"
 #include "../../optimization_algorithms/brent.h"
 
-double GetLoadingWILSON(double P, std::vector<double> parameters);
+double GetLoadingWILSON(double P, double T, std::vector<double> parameters);
 
 #endif

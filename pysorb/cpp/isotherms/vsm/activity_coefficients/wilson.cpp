@@ -16,7 +16,7 @@ double WilsonPcalc(double loading, double P, double maximum_loading, double b, d
     Optimizes the parameters based on the pressure
 */
 double
-GetLoadingWILSON(double P, std::vector<double> parameters)
+GetLoadingWILSON(double P, double T, std::vector<double> parameters)
 {
     /* Makes a Initial estimate of the parameters using the Langmuir Equation */
     double loading_estimate = langmuir(P, {parameters[0], parameters[1]}) * .8;

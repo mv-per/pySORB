@@ -7,7 +7,7 @@ BaseIsothermModel::BaseIsothermModel(std::string isotherm)
 
 double BaseIsothermModel::GetLoading(double Pressure, double Temperature, std::vector<double> Parameters)
 {
-    return this->LoadingInvoker(Pressure, Parameters);
+    return this->LoadingInvoker(Pressure, Temperature, Parameters);
 }
 
 std::vector<double> BaseIsothermModel::GetLoadings(std::vector<double> Pressures, double Temperature, std::vector<double> Parameters)
@@ -16,7 +16,7 @@ std::vector<double> BaseIsothermModel::GetLoadings(std::vector<double> Pressures
 
     for (std::size_t i = 0; i < Pressures.size(); i++)
     {
-        CalculatedLoadings[i] = this->LoadingInvoker(Pressures[i], Parameters);
+        CalculatedLoadings[i] = this->LoadingInvoker(Pressures[i], Temperature, Parameters);
     }
     return CalculatedLoadings;
 }
