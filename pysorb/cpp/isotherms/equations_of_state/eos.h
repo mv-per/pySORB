@@ -7,6 +7,8 @@
 #include "pr77_peneloux.h"
 #include "srk.h"
 #include "srk_peneloux.h"
+#include <functional>
+#include <vector>
 
 typedef std::function<mono_eos(double, double)> call_mono_eos;
 

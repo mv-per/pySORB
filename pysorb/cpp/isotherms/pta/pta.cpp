@@ -5,7 +5,7 @@ std::function<double(double, double, std::vector<double>)> PotentialTheoryModels
     if (this->Potential == DRA_POTENTIAL)
     {
         return [this](double P, double T, std::vector<double> params)
-        { return GetDRAPureLoading(P, T, params, this->MonoEosInvoker, this->MonoPotentialInvoker, this->Fluid, this->NumberOfLayers, this->IsothermType, this->Potential); };
+        { return GetDRAPureLoading(P, T, params, this->MonoEosInvoker, this->MonoPotentialInvoker, this->fluid, this->NumberOfLayers, this->IsothermType, this->Potential); };
     }
     else if (this->Potential == STEELE_POTENTIAL || this->Potential == LEE_POTENTIAL)
     {
@@ -14,7 +14,7 @@ std::function<double(double, double, std::vector<double>)> PotentialTheoryModels
             if (!this->AdsorbentConfigured) {
                 throw std::invalid_argument("Adsorbent properties are needed for LJ-based potentials and is not defined.");
             }
-            return GetLJPureLoading(P, T, params, this->MonoEosInvoker, this->MonoPotentialInvoker, this->Fluid, this->NumberOfLayers, this->IsothermType, this->Potential); };
+            return GetLJPureLoading(P, T, params, this->MonoEosInvoker, this->MonoPotentialInvoker, this->fluid, this->NumberOfLayers, this->IsothermType, this->Potential); };
     }
     else
     {
@@ -28,14 +28,14 @@ void PotentialTheoryModels::SetAdsorbent(Adsorbent adsorbent)
     this->AdsorbentConfigured = true;
 }
 
-void PotentialTheoryModels::SetupInvokers(bool pure = false)
+void PotentialTheoryModels::SetupInvokers(bool pure)
 {
 
     if (pure)
     {
-        this->MonoEosInvoker = GetPureEquationOfStateInvoker(this->EquationOfState, this->Fluid);
-        this->MonoPotentialInvoker = GetPureAdsorptionPotentialInvoker(this->Potential, this->Fluid, this->adsorbent);
-        this->LoadingInvoker = this->GetPureLoadingInvoker();
+        this->MonoEosInvoker = GetPureEquationOfStateInvoker(this->EquationOfState, this->fluid);
+        this->MonoPotentialInvoker = GetPureAdsorptionPotentialInvoker(this->Potential, this->fluid, this->adsorbent);
+        this->PureLoadingInvoker = this->GetPureLoadingInvoker();
     }
     else
     {

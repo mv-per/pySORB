@@ -16,7 +16,7 @@ class VacancySolutionMethod : public BaseIsothermModel
 {
 public:
     /**
-     * @brief Constructs a VacancySolutionMethod object and initializes the LoadingInvoker based on the given isotherm name.
+     * @brief Constructs a VacancySolutionMethod object and initializes the PureLoadingInvoker based on the given isotherm name.
      * @param model The name of the activity coefficient model to be used, options: `wilson`, `nrtl`, `flory-huggins`.
      */
     VacancySolutionMethod(std::string model);
@@ -27,7 +27,7 @@ public:
      * @return The corresponding loading invoker function.
      * @throw std::invalid_argument If the model is not found or defined.
      */
-    std::function<double(double, double, std::vector<double>)> GetLoadingInvoker(std::string model);
+    std::function<double(double, double, std::vector<double>)> GetPureLoadingInvoker(std::string model);
 };
 
 #endif

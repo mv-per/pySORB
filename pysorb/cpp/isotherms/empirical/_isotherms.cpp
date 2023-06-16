@@ -5,9 +5,21 @@ double freundlich(double Pressure, std::vector<double> Parameters)
     return (Parameters[0] * std::pow(Pressure, 1.0 / Parameters[1]));
 }
 
+double freundlich_2(double Pressure, double &Temperature, std::vector<double> Parameters)
+{
+    double inverse_n = GAS_CONSTANT * Temperature / Parameters[2];
+    double K = Parameters[0] * std::exp(-Parameters[1] * inverse_n);
+    return K * std::pow(Pressure, inverse_n);
+}
+
 double langmuir(double Pressure, std::vector<double> Parameters)
 {
     return Parameters[0] * Parameters[1] * Pressure / (1.0 + Parameters[1] * Pressure);
+}
+
+double dual_langmuir(double Pressure, std::vector<double> Parameters)
+{
+    return Parameters[0] * Parameters[1] * Pressure / (1 + Parameters[1] * Pressure) + Parameters[2] * Parameters[3] * Pressure / (1 + Parameters[3] * Pressure);
 }
 
 double redlich_peterson(double Pressure, std::vector<double> Parameters)

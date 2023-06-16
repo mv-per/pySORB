@@ -1,7 +1,7 @@
 
 #include "vsm.h"
 
-std::function<double(double, double, std::vector<double>)> VacancySolutionMethod::GetLoadingInvoker(std::string model)
+std::function<double(double, double, std::vector<double>)> VacancySolutionMethod::GetPureLoadingInvoker(std::string model)
 {
 
     if (model == "nrtl")

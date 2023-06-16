@@ -1,5 +1,15 @@
 #include "utils.h"
 
+void CheckCompositionFraction(std::vector<double> &composition)
+{
+    double composition_sum = std::accumulate(composition.begin(), composition.end(), 0.0);
+    // Check the factions consistency
+    for (std::size_t i = 0; i < composition.size(); i++)
+    {
+        composition[i] = composition[i] / composition_sum;
+    }
+}
+
 std::function<double(std::vector<double>, std::vector<double>)> GetDeviationInvoker(std::string DeviationEquation, double NumberOfParameters)
 {
 

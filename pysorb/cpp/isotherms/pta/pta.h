@@ -11,15 +11,11 @@
 #include "../data_classes.h"
 #include "pta_pure.h"
 
-const std::string DRA_POTENTIAL = "DRA";
-const std::string LEE_POTENTIAL = "LEE";
-const std::string STEELE_POTENTIAL = "STEELE";
-
 class PotentialTheoryModels : public BaseIsothermModel
 {
 public:
     /**
-     * @brief Constructs a PotentialTheoryModels object and initializes the LoadingInvoker based on the given isotherm name.
+     * @brief Constructs a PotentialTheoryModels object and initializes the PureLoadingInvoker based on the given isotherm name.
      * @param model The name of the activity coefficient model to be used, options: `wilson`, `nrtl`, `flory-huggins`.
      */
     PotentialTheoryModels(std::string potential, std::string equation_of_state, std::string isotherm_type, std::size_t num_of_layers, std::vector<Fluid> fluids, Adsorbent adsorbent) : BaseIsothermModel()
@@ -31,7 +27,7 @@ public:
         this->Fluids = fluids;
         this->SetAdsorbent(adsorbent);
 
-        this->SetupInvokers();
+        this->SetupInvokers(false);
     }
 
     PotentialTheoryModels(std::string potential, std::string equation_of_state, std::string isotherm_type, std::size_t num_of_layers, std::vector<Fluid> fluids) : BaseIsothermModel()
@@ -42,7 +38,7 @@ public:
         this->EquationOfState = equation_of_state;
         this->Fluids = fluids;
 
-        this->SetupInvokers();
+        this->SetupInvokers(false);
     }
 
     PotentialTheoryModels(std::string potential, std::string equation_of_state, std::string isotherm_type, std::size_t num_of_layers, Fluid fluid, Adsorbent adsorbent) : BaseIsothermModel()
@@ -51,7 +47,7 @@ public:
         this->IsothermType = isotherm_type;
         this->NumberOfLayers = num_of_layers;
         this->EquationOfState = equation_of_state;
-        this->Fluid = fluid;
+        this->fluid = fluid;
         this->SetAdsorbent(adsorbent);
 
         this->SetupInvokers(true);
@@ -63,7 +59,7 @@ public:
         this->IsothermType = isotherm_type;
         this->NumberOfLayers = num_of_layers;
         this->EquationOfState = equation_of_state;
-        this->Fluid = fluid;
+        this->fluid = fluid;
 
         this->SetupInvokers(true);
     }
@@ -73,7 +69,7 @@ private:
     std::function<mix_eos(std::vector<double>, double, double)> MixEosInvoker;
     std::function<double(double, std::vector<double>)> MonoPotentialInvoker;
     std::vector<Fluid> Fluids;
-    Fluid Fluid;
+    Fluid fluid;
     Adsorbent adsorbent;
     std::string Potential;
     bool AdsorbentConfigured = false;
@@ -82,7 +78,7 @@ private:
     std::string EquationOfState;
 
     void SetAdsorbent(Adsorbent adsorbent);
-    void SetupInvokers(bool pure = false);
+    void SetupInvokers(bool pure);
 
     /**
      * @brief Returns the appropriate loading invoker function based on the given model name.
