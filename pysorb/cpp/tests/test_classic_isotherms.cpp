@@ -1,8 +1,6 @@
 #include <gtest/gtest.h>
 #include "../isotherms/empirical/classic_isotherms.h"
 
-#include <iostream>
-
 double getLoading(std::string isotherm, std::vector<double> parameters)
 {
     ClassicIsotherms IsothermModel = ClassicIsotherms(isotherm);

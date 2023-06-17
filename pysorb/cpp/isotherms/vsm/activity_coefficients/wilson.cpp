@@ -3,13 +3,20 @@
     Calculates the difference from the calculated and experimental pressure
     based on the parameters and n_exp
 */
-double WilsonPcalc(double loading, double P, double maximum_loading, double b, double a_1v, double a_v1)
+
+double GetVSMWilsonPressure(double loading, double maximum_loading, double b, double a_1v, double a_v1)
 {
     double theta = loading / maximum_loading;
-    double Pcalc = (maximum_loading / b * (theta / (1.0 - theta))) *
-                   a_1v * ((1.0 - (1.0 - a_v1) * theta) / (a_1v + (1.0 - a_1v) * theta)) *
-                   std::exp(-(a_v1 * (1.0 - a_v1) * theta) / (1.0 - (1.0 - a_v1) * theta) - ((1.0 - a_1v) * theta / (a_1v + (1.0 - a_1v) * theta)));
-    return 1e6 * (P - Pcalc) / P;
+    double Pressure = (maximum_loading / b * (theta / (1.0 - theta))) *
+                      a_1v * ((1.0 - (1.0 - a_v1) * theta) / (a_1v + (1.0 - a_1v) * theta)) *
+                      std::exp(-(a_v1 * (1.0 - a_v1) * theta) / (1.0 - (1.0 - a_v1) * theta) - ((1.0 - a_1v) * theta / (a_1v + (1.0 - a_1v) * theta)));
+    return Pressure;
+}
+
+double GetVSMWilsonPressureEquilibrium(double loading, double Pressure, std::vector<double> parameters)
+{
+    double CalculatedPressure = GetVSMWilsonPressure(loading, parameters[0], parameters[1], parameters[2], parameters[3]);
+    return 1.0e6 * (Pressure - CalculatedPressure) / Pressure;
 }
 
 /*
@@ -24,9 +31,8 @@ GetLoadingWILSON(double P, double T, std::vector<double> parameters)
     // Set the Equilibrium lambda function
     auto min = [&](double x)
     {
-        return WilsonPcalc(std::fabs(x),
-                           P, parameters[0], parameters[1],
-                           parameters[2], parameters[3]);
+        return GetVSMWilsonPressureEquilibrium(std::fabs(x),
+                                               P, parameters);
     };
 
     /* Solve using the Brent Method */
@@ -34,15 +40,6 @@ GetLoadingWILSON(double P, double T, std::vector<double> parameters)
 
     return loading;
 }
-
-// /*
-//     Returns the absolute difference of n_calc and n_exp
-// */
-// double MinimizeWilson(double P, double n_exp, double param[])
-// {
-//     double n_calc = CalculateWilson(P, param);
-//     return fabs(n_exp - n_calc);
-// }
 
 // /*
 //     Returns the absolute difference of n_calc and n_exp

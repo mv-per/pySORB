@@ -5,7 +5,7 @@
 #include <cmath>
 
 #include "../../empirical/_isotherms.h"
-#include "../../optimization_algorithms/nelder_mead.h"
+#include "../../optimization_algorithms/brent.h"
 
 double GetLoadingFloryHuggins(double P, double T, std::vector<double> parameters);
 

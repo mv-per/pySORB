@@ -6,13 +6,12 @@ typedef struct
     double P;
 } pure_fh_vsm;
 
-void FHPcalc(int n, point_t *point, const void *arg)
+double OptimizePressureFloryHuggins(double loading, double P, double n_max, double b, double a_1v)
 {
-    const pure_fh_vsm *params = (const pure_fh_vsm *)arg;
-    double theta = point->x[0] / params->n_max;
-    double Pcalc = (params->n_max / params->b * (theta / (1.0 - theta))) *
-                   std::exp(params->a_1v * params->a_1v * theta / (1.0 + params->a_1v * theta));
-    point->fx = std::fabs(params->P - Pcalc) / params->P;
+    double theta = loading / n_max;
+    double Pcalc = (n_max / b * (theta / (1.0 - theta))) *
+                   std::exp(a_1v * a_1v * theta / (1.0 + a_1v * theta));
+    return 1.0e6 * (P - Pcalc) / P;
 }
 
 double GetLoadingFloryHuggins(double P, double T, std::vector<double> parameters)
@@ -20,27 +19,39 @@ double GetLoadingFloryHuggins(double P, double T, std::vector<double> parameters
     // Initial loading estimate using langmuir;
     double loading_estimate = langmuir(P, {parameters[0], parameters[1]}) * .8;
 
-    point_t start_pure;
-    start_pure.x = (double *)malloc(1 * sizeof(double));
-    start_pure.x[0] = loading_estimate;
+    // Set the Equilibrium lambda function
+    auto min = [&](double x)
+    {
+        return OptimizePressureFloryHuggins(std::fabs(x),
+                                            P, parameters[0], parameters[1],
+                                            parameters[2]);
+    };
 
-    pure_fh_vsm params_pure;
-    params_pure.n_max = parameters[0];
-    params_pure.b = parameters[1];
-    params_pure.a_1v = parameters[2];
-    params_pure.P = P;
+    /* Solve using the Brent Method */
+    double loading = brent_zeroin(min, loading_estimate, 1.0e-16);
 
-    // optimisation settings
-    optimset_t optimset_pure;
-    optimset_pure.tolx = 1e-16;    // tolerance on the simplex solutions coordinates
-    optimset_pure.tolf = 1e-16;    // tolerance on the function value
-    optimset_pure.max_iter = 1500; // maximum number of allowed iterations
-    optimset_pure.max_eval = 1500; // maximum number of allowed function evaluations
-    optimset_pure.verbose = 0;     // toggle verbose output during minimization
-    point_t solution_pure;
-    nelder_mead(1, &start_pure, &solution_pure, &FHPcalc, &params_pure, &optimset_pure);
+    return loading;
+    // point_t start_pure;
+    // start_pure.x = (double *)malloc(1 * sizeof(double));
+    // start_pure.x[0] = loading_estimate;
 
-    return solution_pure.x[0];
+    // pure_fh_vsm params_pure;
+    // params_pure.n_max = parameters[0];
+    // params_pure.b = parameters[1];
+    // params_pure.a_1v = parameters[2];
+    // params_pure.P = P;
+
+    // // optimisation settings
+    // optimset_t optimset_pure;
+    // optimset_pure.tolx = 1e-16;    // tolerance on the simplex solutions coordinates
+    // optimset_pure.tolf = 1e-16;    // tolerance on the function value
+    // optimset_pure.max_iter = 1500; // maximum number of allowed iterations
+    // optimset_pure.max_eval = 1500; // maximum number of allowed function evaluations
+    // optimset_pure.verbose = 0;     // toggle verbose output during minimization
+    // point_t solution_pure;
+    // nelder_mead(1, &start_pure, &solution_pure, &FHPcalc, &params_pure, &optimset_pure);
+
+    // return solution_pure.x[0];
 }
 
 // double MinimizeFH(double P, double n_exp, double param[])
