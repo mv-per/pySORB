@@ -24,10 +24,10 @@ public:
         this->IsothermType = isotherm_type;
         this->NumberOfLayers = num_of_layers;
         this->EquationOfState = equation_of_state;
-        this->Fluids = fluids;
+        this->fluids = fluids;
         this->SetAdsorbent(adsorbent);
-
-        this->SetupInvokers(false);
+        this->IsPure = false;
+        this->SetupInvokers();
     }
 
     PotentialTheoryModels(std::string potential, std::string equation_of_state, std::string isotherm_type, std::size_t num_of_layers, std::vector<Fluid> fluids) : BaseIsothermModel()
@@ -36,9 +36,10 @@ public:
         this->IsothermType = isotherm_type;
         this->NumberOfLayers = num_of_layers;
         this->EquationOfState = equation_of_state;
-        this->Fluids = fluids;
+        this->fluids = fluids;
+        this->IsPure = false;
 
-        this->SetupInvokers(false);
+        this->SetupInvokers();
     }
 
     PotentialTheoryModels(std::string potential, std::string equation_of_state, std::string isotherm_type, std::size_t num_of_layers, Fluid fluid, Adsorbent adsorbent) : BaseIsothermModel()
@@ -49,8 +50,8 @@ public:
         this->EquationOfState = equation_of_state;
         this->fluid = fluid;
         this->SetAdsorbent(adsorbent);
-
-        this->SetupInvokers(true);
+        this->IsPure = true;
+        this->SetupInvokers();
     }
 
     PotentialTheoryModels(std::string potential, std::string equation_of_state, std::string isotherm_type, std::size_t num_of_layers, Fluid fluid) : BaseIsothermModel()
@@ -60,15 +61,35 @@ public:
         this->NumberOfLayers = num_of_layers;
         this->EquationOfState = equation_of_state;
         this->fluid = fluid;
-
-        this->SetupInvokers(true);
+        this->IsPure = true;
+        this->SetupInvokers();
     }
 
+    void SetupInvokers() override;
+
+    /**
+     * @brief Returns the appropriate loading invoker function based on the given model name.
+     * @param model The name of the activity coefficient model to be used
+     * @return The corresponding loading invoker function.
+     * @throw std::invalid_argument If the model is not found or defined.
+     */
+    std::function<double(double, double, std::vector<double>)> GetPureLoadingInvoker(std::string potential) override;
+
+    /**
+     * @brief Returns the appropriate loading invoker function based on the given model name.
+     * @param isotherm The name of the isotherm.
+     * @return The corresponding isotherm invoker function.
+     * @throw std::invalid_argument If the isotherm is not found or defined.
+     */
+    std::function<std::vector<double>(double, double, std::vector<double>, std::vector<std::vector<double>>)> GetMixtureLoadingInvoker(std::string potential) override;
+
 private:
+    bool IsPure = false;
     std::function<mono_eos(double, double)> MonoEosInvoker;
     std::function<mix_eos(std::vector<double>, double, double)> MixEosInvoker;
     std::function<double(double, std::vector<double>)> MonoPotentialInvoker;
-    std::vector<Fluid> Fluids;
+    std::function<double(double, std::vector<double>)> MixPotentialInvoker;
+    std::vector<Fluid> fluids;
     Fluid fluid;
     Adsorbent adsorbent;
     std::string Potential;
@@ -78,15 +99,6 @@ private:
     std::string EquationOfState;
 
     void SetAdsorbent(Adsorbent adsorbent);
-    void SetupInvokers(bool pure);
-
-    /**
-     * @brief Returns the appropriate loading invoker function based on the given model name.
-     * @param model The name of the activity coefficient model to be used
-     * @return The corresponding loading invoker function.
-     * @throw std::invalid_argument If the model is not found or defined.
-     */
-    std::function<double(double, double, std::vector<double>)> GetPureLoadingInvoker();
 };
 
 #endif

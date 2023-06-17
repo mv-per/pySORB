@@ -15,58 +15,87 @@
 #include <cmath>
 #include <cfloat>
 
-class MixturePTA
-{
+// class MixturePTA
+// {
 
-public:
-	std::string equation_of_state;
-	std::string isotherm_type;
-	std::string potential;
-	std::size_t num_of_layers;
-	~MixturePTA() {}
+// public:
+// 	std::string equation_of_state;
+// 	std::string isotherm_type;
+// 	std::string potential;
+// 	std::size_t num_of_layers;
+// 	~MixturePTA() {}
 
-	/**
-	 * MixturePTA
-	 *
-	 * @param potential_ potential to be used in the calculations
-	 * @param eos Name of the Equation of State to be used in the calculations
-	 * @param isotherm_type_ Type of the isotherm to be used in calculations (excess | absolute).
-	 * @param num_of_layers_ Number of layers from the solid to Gibbs phase.
-	 */
-	MixturePTA(std::string potential_, std::string eos, std::string isotherm_type_, std::size_t num_of_layers_);
+// 	/**
+// 	 * MixturePTA
+// 	 *
+// 	 * @param potential_ potential to be used in the calculations
+// 	 * @param eos Name of the Equation of State to be used in the calculations
+// 	 * @param isotherm_type_ Type of the isotherm to be used in calculations (excess | absolute).
+// 	 * @param num_of_layers_ Number of layers from the solid to Gibbs phase.
+// 	 */
+// 	MixturePTA(std::string potential_, std::string eos, std::string isotherm_type_, std::size_t num_of_layers_);
 
-	std::vector<double> GetLoading(std::vector<double> composition, double P, double T, std::vector<std::vector<double>> potential_params, std::vector<Fluid> fluids);
+// 	std::vector<double> GetLoading(std::vector<double> composition, double P, double T, std::vector<std::vector<double>> potential_params, std::vector<Fluid> fluids);
 
-	void SetAdsorbent(Adsorbent adsorbent);
+// 	void SetAdsorbent(Adsorbent adsorbent);
 
-private:
-	bool AdsorbentConfigured = false;
-	Adsorbent adsorbent;
-	double min_int = 0.7;
+// private:
+// 	bool AdsorbentConfigured = false;
+// 	Adsorbent adsorbent;
+// 	double min_int = 0.7;
 
-	std::function<mix_eos(std::vector<double>, double, double)>
-	get_equation_of_state_mixture(std::vector<Fluid> fluids);
+// 	std::function<mix_eos(std::vector<double>, double, double)>
+// 	get_equation_of_state_mixture(std::vector<Fluid> fluids);
 
-	std::function<std::vector<double>(std::vector<double>, double, double, std::vector<std::vector<double>>, std::vector<Fluid>)> GetLoadingFunction(void);
+// 	std::function<std::vector<double>(std::vector<double>, double, double, std::vector<std::vector<double>>, std::vector<Fluid>)> GetLoadingFunction(void);
 
-	std::function<double(std::size_t, double, Fluid)>
-	GetAdsorptionPotentialInvoker(std::vector<std::vector<double>> potential_params);
+// 	std::function<double(std::size_t, double, Fluid)>
+// 	GetAdsorptionPotentialInvoker(std::vector<std::vector<double>> potential_params);
 
-	std::vector<double>
-	get_mixture_lj_loading(std::vector<double> bulk_composition, double bulk_pressure, double Temperature, std::vector<std::vector<double>> potential_parameters, std::vector<Fluid> fluids);
+// 	std::vector<double>
+// 	get_mixture_lj_loading(std::vector<double> bulk_composition, double bulk_pressure, double Temperature, std::vector<std::vector<double>> potential_parameters, std::vector<Fluid> fluids);
 
-	std::vector<double>
-	get_mixture_dr_loading(std::vector<double> bulk_composition, double bulk_pressure, double Temperature, std::vector<std::vector<double>> potential_parameters, std::vector<Fluid> fluids);
+// 	std::vector<double>
+// 	get_mixture_dr_loading(std::vector<double> bulk_composition, double bulk_pressure, double Temperature, std::vector<std::vector<double>> potential_parameters, std::vector<Fluid> fluids);
 
-	double get_equilibrium_difference(double Pz,
-									  std::vector<double> adsorbed_composition,
-									  std::vector<double> bulk_fugacity,
-									  std::vector<double> f_eps,
-									  double T,
-									  call_mix_eos eos);
+// 	double get_equilibrium_difference(double Pz,
+// 									  std::vector<double> adsorbed_composition,
+// 									  std::vector<double> bulk_fugacity,
+// 									  std::vector<double> f_eps,
+// 									  double T,
+// 									  call_mix_eos eos);
 
-	struct Equilibrium find_equilibrium_properties(double Pz_old, std::vector<double> xold, std::vector<double> fb,
-												   std::vector<double> f_eps, double T, call_mix_eos eos);
-};
+// 	struct Equilibrium find_equilibrium_properties(double Pz_old, std::vector<double> xold, std::vector<double> fb,
+// 												   std::vector<double> f_eps, double T, call_mix_eos eos);
+// };
+
+std::function<mix_eos(double, double, std::vector<double>)> GetMixtureEquationOfStateInvoker(std::string equation_of_state, Fluid fluid_);
+
+std::function<double(double, std::vector<double>)> GetMixtureAdsorptionPotentialInvoker(std::string potential, Fluid Fluid, Adsorbent solid_properties);
+/**
+ * Get the potential function based on its energy interation and temperature
+ *
+ */
+std::vector<double> GetDRAMixtureLoading(double BulkPressure,
+										 double Temperature,
+										 std::vector<double> BulkComposition,
+										 std::vector<double> Parameters,
+										 call_mix_eos EquationOfStateInvoker,
+										 call_potential_mix PotentialInvoker,
+										 std::vector<Fluid> fluids,
+										 std::size_t NumberOfLayers,
+										 std::string IsothermType,
+										 std::string Potential);
+std::vector<double> GetLJMixtureLoading(double BulkPressure,
+										double Temperature,
+										std::vector<double> BulkComposition,
+										std::vector<double> Parameters,
+										call_mix_eos EquationOfStateInvoker,
+										call_potential_mix PotentialInvoker,
+										std::vector<Fluid> fluids,
+										std::size_t NumberOfLayers,
+										std::string IsothermType,
+										std::string Potential);
+// };
 
 #endif

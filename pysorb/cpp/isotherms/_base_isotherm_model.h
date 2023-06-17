@@ -20,7 +20,7 @@ public:
      */
     BaseIsothermModel(){};
 
-    virtual void SetupLoadingInvoker(std::string model) = 0;
+    virtual void SetupInvokers() = 0;
 
     /**
      * @brief Calculates the loading for the given pressure, temperature, and parameters.

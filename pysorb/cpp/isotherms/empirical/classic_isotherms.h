@@ -19,10 +19,11 @@ public:
      */
     ClassicIsotherms(std::string isotherm)
     {
-        this->SetupLoadingInvoker(isotherm);
+        this->Isotherm = isotherm;
+        this->SetupInvokers();
     }
 
-    void SetupLoadingInvoker(std::string isotherm) override;
+    void SetupInvokers() override;
 
     /**
      * @brief Returns the appropriate loading invoker function based on the given model name.
@@ -41,6 +42,7 @@ public:
     std::function<std::vector<double>(double, double, std::vector<double>, std::vector<std::vector<double>>)> GetMixtureLoadingInvoker(std::string isotherm) override;
 
 private:
+    std::string Isotherm;
     std::vector<std::string> PureModels =
         {
             "langmuir",

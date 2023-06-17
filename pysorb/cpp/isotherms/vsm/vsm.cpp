@@ -1,12 +1,12 @@
 
 #include "vsm.h"
 
-void VacancySolutionMethod::SetupLoadingInvoker(std::string model)
+void VacancySolutionMethod::SetupInvokers()
 {
-    if ((std::find(this->activity_models.begin(), this->activity_models.end(), model)) != this->activity_models.end())
+    if ((std::find(this->activity_models.begin(), this->activity_models.end(), this->Model)) != this->activity_models.end())
     {
-        this->PureLoadingInvoker = this->GetPureLoadingInvoker(model);
-        this->MixtureLoadingInvoker = this->GetMixtureLoadingInvoker(model);
+        this->PureLoadingInvoker = this->GetPureLoadingInvoker(this->Model);
+        this->MixtureLoadingInvoker = this->GetMixtureLoadingInvoker(this->Model);
     }
     else
     {

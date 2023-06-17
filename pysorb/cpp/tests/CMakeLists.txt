@@ -5,6 +5,7 @@ set(This _pySorbTests)
 set(Sources
 test_classic_isotherms.cpp
 test_vsm.cpp
+test_pta.cpp
 )
 
 add_executable(${This} ${Sources})

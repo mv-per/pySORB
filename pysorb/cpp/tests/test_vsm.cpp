@@ -105,10 +105,3 @@ TEST(test_vsm_mixture, GetLoadingFloryHuggins)
         EXPECT_NEAR(CalculatedLoadings[i], ExpectedLoadings[i], 1e-4);
     };
 }
-
-// TEST(test_vsm, GetLoadings)
-// {
-//     EXPECT_NEAR(getVSMLoading("wilson", {10, 0.05, 0.3, 0.5}), 8.90614, 1e-5);
-//     EXPECT_NEAR(getVSMLoading("nrtl", {10, 0.05, 0.1, 0.2, 0.5}), 9.30121, 1e-5);
-//     EXPECT_NEAR(getVSMLoading("flory-huggins", {10, 5e-2, 0.9}), 2.929822, 1e-5);
-// }

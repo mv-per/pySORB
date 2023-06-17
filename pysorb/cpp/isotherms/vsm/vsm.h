@@ -21,10 +21,11 @@ public:
      */
     VacancySolutionMethod(std::string model)
     {
-        this->SetupLoadingInvoker(model);
+        this->Model = model;
+        this->SetupInvokers();
     };
 
-    void SetupLoadingInvoker(std::string model) override;
+    void SetupInvokers() override;
 
     /**
      * @brief Returns the appropriate loading invoker function based on the given model name.
@@ -46,6 +47,8 @@ public:
         "nrtl",
         "wilson",
         "flory-huggins"};
+
+    std::string Model;
 };
 
 #endif

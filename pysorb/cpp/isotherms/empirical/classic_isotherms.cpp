@@ -96,15 +96,15 @@ std::function<std::vector<double>(double, double, std::vector<double>, std::vect
     }
 }
 
-void ClassicIsotherms::SetupLoadingInvoker(std::string isotherm)
+void ClassicIsotherms::SetupInvokers()
 {
-    if ((std::find(this->PureModels.begin(), this->PureModels.end(), isotherm)) != this->PureModels.end())
+    if ((std::find(this->PureModels.begin(), this->PureModels.end(), this->Isotherm)) != this->PureModels.end())
     {
-        this->PureLoadingInvoker = this->GetPureLoadingInvoker(isotherm);
+        this->PureLoadingInvoker = this->GetPureLoadingInvoker(this->Isotherm);
     }
-    else if ((std::find(this->MixtureModels.begin(), this->MixtureModels.end(), isotherm)) != this->MixtureModels.end())
+    else if ((std::find(this->MixtureModels.begin(), this->MixtureModels.end(), this->Isotherm)) != this->MixtureModels.end())
     {
-        this->MixtureLoadingInvoker = this->GetMixtureLoadingInvoker(isotherm);
+        this->MixtureLoadingInvoker = this->GetMixtureLoadingInvoker(this->Isotherm);
     }
     else
     {
