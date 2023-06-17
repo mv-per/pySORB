@@ -6,7 +6,7 @@ void VacancySolutionMethod::SetupLoadingInvoker(std::string model)
     if ((std::find(this->activity_models.begin(), this->activity_models.end(), model)) != this->activity_models.end())
     {
         this->PureLoadingInvoker = this->GetPureLoadingInvoker(model);
-        // this->MixtureLoadingInvoker = this->GetMixtureLoadingInvoker(model);
+        this->MixtureLoadingInvoker = this->GetMixtureLoadingInvoker(model);
     }
     else
     {
@@ -28,7 +28,7 @@ std::function<double(double, double, std::vector<double>)> VacancySolutionMethod
     {
         return [=](double pressure, double temperature, std::vector<double> parameters)
         {
-            return GetLoadingWILSON(pressure, temperature, parameters);
+            return GetLoadingWILSON(pressure, parameters);
         };
     }
     else if (model == "flory-huggins")
@@ -46,5 +46,29 @@ std::function<double(double, double, std::vector<double>)> VacancySolutionMethod
 
 std::function<std::vector<double>(double, double, std::vector<double>, std::vector<std::vector<double>>)> VacancySolutionMethod::GetMixtureLoadingInvoker(std::string model)
 {
-    throw std::runtime_error("Not implemented");
+    if (model == "nrtl")
+    {
+        return [=](double pressure, double temperature, std::vector<double> bulk_composition, std::vector<std::vector<double>> parameters)
+        {
+            return GetMixtureLoadingNRTL(pressure, bulk_composition, parameters);
+        };
+    }
+    else if (model == "wilson")
+    {
+        return [=](double pressure, double temperature, std::vector<double> bulk_composition, std::vector<std::vector<double>> parameters)
+        {
+            return GetMixtureLoadingWILSON(pressure, bulk_composition, parameters);
+        };
+    }
+    else if (model == "flory-huggins")
+    {
+        return [=](double pressure, double temperature, std::vector<double> bulk_composition, std::vector<std::vector<double>> parameters)
+        {
+            return GetMixtureLoadingFloryHuggins(pressure, bulk_composition, parameters);
+        };
+    }
+    else
+    {
+        throw std::invalid_argument("model not found/defined.");
+    }
 }

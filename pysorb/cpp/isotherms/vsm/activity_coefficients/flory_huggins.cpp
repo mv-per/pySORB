@@ -61,170 +61,153 @@ double GetLoadingFloryHuggins(double P, double T, std::vector<double> parameters
 //     return fabs(n_exp - n_calc);
 // }
 
-// double *CalculateLogGammaFH(double *xs, double **Aij, size_t *ncomp)
-// {
-//     /* Variable declaration */
-//     double sum_1;
-//     double *gamma = (double *)malloc(*ncomp + 1 * sizeof(double));
-//     size_t i, j;
+std::vector<double> CalculateLogGammaFH(std::vector<double> xs, std::vector<std::vector<double>> Aij, size_t ncomp)
+{
+    /* Variable declaration */
+    double sum_1;
+    std::vector<double> gamma(ncomp + 1, 0.0);
+    size_t i, j;
 
-//     /* calculate gamma */
-//     for (i = 0; i <= *ncomp; i++)
-//     {
-//         sum_1 = 0.;
-//         for (j = 0; j <= *ncomp; j++)
-//         {
-//             sum_1 += xs[j] / (Aij[i][j] + 1.0);
-//         }
+    /* calculate gamma */
+    for (i = 0; i <= ncomp; i++)
+    {
+        sum_1 = 0.;
+        for (j = 0; j <= ncomp; j++)
+        {
+            sum_1 += xs[j] / (Aij[i][j] + 1.0);
+        }
 
-//         gamma[i] = exp((1.0 - 1.0 / sum_1) - log(sum_1));
-//     }
-//     return gamma;
-// }
+        gamma[i] = exp((1.0 - 1.0 / sum_1) - log(sum_1));
+    }
+    return gamma;
+}
 
-// double **GetAijMatrixFH(vector<vector<double>> param, size_t *ncomp)
-// {
-//     /* Variable Declaration */
-//     double **Aij = (double **)malloc(*ncomp + 1 * sizeof(double *));
-//     size_t i, j;
-//     for (i = 0; i <= *ncomp; i++)
-//     {
-//         Aij[i] = (double *)malloc(*ncomp + 1 * sizeof(double));
-//     }
-//     /* Obtain Aij matrix */
+std::vector<std::vector<double>> GetAijMatrixFH(std::vector<std::vector<double>> param, std::size_t ncomp)
+{
+    /* Variable Declaration */
+    std::vector<std::vector<double>> Aij(ncomp + 1, std::vector<double>(ncomp + 1, 0.0));
+    size_t i, j;
 
-//     for (i = 0; i < *ncomp; i++)
-//     {
-//         for (j = 0; j < *ncomp; j++)
-//         {
-//             if (i == j)
-//             {
-//                 Aij[i][j] = 0.0;
-//             }
-//             else
-//             {
-//                 Aij[i][j] = (param[i][2] + 1.0) / (param[j][2] + 1.0) - 1.0;
-//             }
-//         }
-//     }
-//     for (i = 0; i < *ncomp; i++)
-//     {
-//         Aij[i][*ncomp] = param[i][2];
-//         Aij[*ncomp][i] = param[i][2];
-//     }
-//     Aij[*ncomp][*ncomp] = 0.0;
-//     return Aij;
-// }
+    for (i = 0; i < ncomp; i++)
+    {
+        for (j = 0; j < ncomp; j++)
+        {
+            if (i == j)
+            {
+                Aij[i][j] = 0.0;
+            }
+            else
+            {
+                Aij[i][j] = (param[i][2] + 1.0) / (param[j][2] + 1.0) - 1.0;
+            }
+        }
+    }
+    for (i = 0; i < ncomp; i++)
+    {
+        Aij[i][ncomp] = param[i][2];
+        Aij[ncomp][i] = param[i][2];
+    }
+    Aij[ncomp][ncomp] = 0.0;
+    return Aij;
+}
 
-// void MinimizeFHVSMMixture(int n, point_t *point, const void *arg)
-// {
-//     const mix_vsm_params *params = (const mix_vsm_params *)arg;
+void MinimizeFHVSMMixture(int n, point_t *point, const void *arg)
+{
+    const MixtureOptimizationArguments *optimization_arguments = (const MixtureOptimizationArguments *)arg;
 
-//     // Function computation
-//     /* Variable declaration */
-//     size_t i;
-//     size_t ncomp = params->y.size();
-//     double *x = (double *)malloc(ncomp * sizeof(double));
-//     double *x_s = (double *)malloc(ncomp + 1 * sizeof(double));
-//     double piA_RT, AdsorbedFugacity, ObjectiveFunction, n_max_mix, theta, nm, logGammaVacancy;
-//     double **Aij;
-//     double *gammaF;
+    // Function computation
+    /* Variable declaration */
+    size_t i;
+    size_t ncomp = optimization_arguments->BulkComposition.size();
+    std::vector<double> x(ncomp, 0.0);
+    std::vector<double> x_s(ncomp, 0.0);
+    double piA_RT, AdsorbedPartialPressure, ObjectiveFunction, n_max_mix, theta, nm, logGammaVacancy;
 
-//     /* Set adsorbed phase composition */
-//     for (i = 0; i < ncomp; i++)
-//     {
-//         x[i] = point->x[i];
-//         // printf("x%d = %f", i, x[i]);
-//     }
-//     nm = point->x[ncomp];
-//     // printf("nm = %f\n", nm);
+    /* Set adsorbed phase composition */
+    for (i = 0; i < ncomp; i++)
+    {
+        x[i] = point->x[i];
+    }
+    /* Calculates maximum adsorbed quantity */
+    nm = point->x[ncomp];
 
-//     /* Calculate the n_max for the mixture */
-//     n_max_mix = 0.0;
-//     for (i = 0; i < ncomp; i++)
-//     {
-//         n_max_mix += x[i] * params->param[i][0];
-//     }
+    /* Calculate the n_max for the mixture */
+    n_max_mix = 0.0;
+    for (i = 0; i < ncomp; i++)
+    {
+        n_max_mix += x[i] * optimization_arguments->Parameters[i][0];
+    }
 
-//     // Define Theta
-//     theta = nm / n_max_mix;
+    /* Defines the "surface used" theta value */
+    theta = nm / n_max_mix;
 
-//     for (i = 0; i < ncomp; i++)
-//     {
-//         x_s[i] = x[i] * theta;
-//     }
-//     x_s[ncomp] = 1.0 - theta;
+    for (i = 0; i < ncomp; i++)
+    {
+        x_s[i] = x[i] * theta;
+    }
+    x_s[ncomp] = 1.0 - theta;
 
-//     Aij = GetAijMatrixFH(params->param, &ncomp);
+    std::vector<std::vector<double>> Aij = GetAijMatrixFH(optimization_arguments->Parameters, ncomp);
 
-//     gammaF = CalculateLogGammaFH(x_s, Aij, &ncomp);
-//     logGammaVacancy = log(gammaF[ncomp] * x_s[ncomp]);
-//     // double *BulkFugacity = params->PropsFun(params->y, params->P);
+    std::vector<double> gammaF = CalculateLogGammaFH(x_s, Aij, ncomp);
 
-//     // printf("\n start");
-//     double *BulkFugacity = (double *)malloc(ncomp * sizeof(double));
-//     for (i = 0; i < ncomp; i++)
-//     {
-//         BulkFugacity[i] = params->y[i] * params->P;
-//     }
+    std::vector<double> PartialPressures(ncomp, 0.0);
+    for (i = 0; i < ncomp; i++)
+    {
+        PartialPressures[i] = optimization_arguments->BulkComposition[i] * optimization_arguments->Pressure;
+    }
 
-//     ObjectiveFunction = 0.0;
-//     double sumx = 0.;
-//     // double CompositionObjectiveFunction = 0.0;
-//     for (i = 0; i < ncomp; i++)
-//     {
-//         sumx += fabs(x[i]);
-//         piA_RT = ((params->param[i][0] - n_max_mix) / nm - 1.0) * logGammaVacancy;
-//         AdsorbedFugacity = gammaF[i] * x[i] * (nm / n_max_mix) * (params->param[i][0] / params->param[i][1]) * (exp(params->param[i][2]) / (1.0 + params->param[i][2])) * exp(piA_RT);
-//         // printf("\n BFug = %f, AdFug = %f, fobj[%d] = %f\n", BulkFugacity[i], AdsorbedFugacity, i, fabs(BulkFugacity[i] - AdsorbedFugacity)/BulkFugacity[i]);
-//         // ObjectiveFunction += fabs(BulkFugacity[i] - AdsorbedFugacity)/BulkFugacity[i];
-//         ObjectiveFunction += fabs(BulkFugacity[i] - AdsorbedFugacity) / BulkFugacity[i];
-//     }
-//     // printf("fx = %f", ObjectiveFunction + fabs(sumx-1.0)/sumx);
-//     point->fx = ObjectiveFunction + 100. / (double)n * fabs(sumx - 1.0);
-// }
+    ObjectiveFunction = 0.0;
+    double sumx = 0.;
+    // double CompositionObjectiveFunction = 0.0;
+    for (i = 0; i < ncomp; i++)
+    {
+        sumx += x[i];
+        piA_RT = ((optimization_arguments->Parameters[i][0] - n_max_mix) / nm - 1.0) * log(gammaF[ncomp] * x_s[ncomp]);
+        AdsorbedPartialPressure = gammaF[i] * x[i] * (nm / n_max_mix) * (optimization_arguments->Parameters[i][0] / optimization_arguments->Parameters[i][1]) * (exp(optimization_arguments->Parameters[i][2]) / (1.0 + optimization_arguments->Parameters[i][2])) * exp(piA_RT);
+        ObjectiveFunction += std::fabs(PartialPressures[i] - AdsorbedPartialPressure) / PartialPressures[i];
+    }
+    // printf("fx = %f", ObjectiveFunction + fabs(sumx-1.0)/sumx);
+    point->fx = 1.0e6 * ObjectiveFunction + 100. / (double)n * std::fabs(sumx - 1.0);
+}
 
-// vector<double> CalculateMixtureFHVSM(double P, vector<double> y, vector<vector<double>> param)
-// {
-//     int n = y.size();
+std::vector<double> GetMixtureLoadingFloryHuggins(double Pressure, std::vector<double> BulkComposition, std::vector<std::vector<double>> Parameters)
+{
+    int ncomp = BulkComposition.size();
 
-//     double *ini = CalculateExtendedLangmuir(param, y, &P, &n);
+    point_t start; // initial point
+    std::vector<double> initial_estimates = extended_langmuir(Pressure, BulkComposition, Parameters);
 
-//     point_t start; // initial point
-//     start.x = (double *)malloc(n + 1 * sizeof(double));
-//     for (int i = 0; i <= n; i++)
-//     {
-//         // printf("ini[d]: %f \t", ini[i]);
-//         start.x[i] = ini[i];
-//     }
+    start.x = (double *)malloc(ncomp + 1 * sizeof(double));
+    double sum_n = 0;
+    for (int i = 0; i < ncomp; i++)
+    {
+        start.x[i] = initial_estimates[i] * 0.8;
+        sum_n += initial_estimates[i];
+    }
+    start.x[ncomp] = sum_n;
 
-//     mix_vsm_params params;
-//     params.P = P;
-//     params.y = y;
-//     params.param = param;
+    MixtureOptimizationArguments params;
+    params.Pressure = Pressure;
+    params.BulkComposition = BulkComposition;
+    params.Parameters = Parameters;
 
-//     // ;
-//     // optimisation settings
-//     optimset_t optimset;
-//     optimset.tolx = 1e-16;    // tolerance on the simplex solutions coordinates
-//     optimset.tolf = 1e-16;    // tolerance on the function value
-//     optimset.max_iter = 1500; // maximum number of allowed iterations
-//     optimset.max_eval = 1500; // maximum number of allowed function evaluations
-//     optimset.verbose = 0;     // toggle verbose output during minimization
+    // optimisation settings
+    optimset_t optimset;
+    optimset.tolx = 1e-16;    // tolerance on the simplex solutions coordinates
+    optimset.tolf = 1e-16;    // tolerance on the function value
+    optimset.max_iter = 1500; // maximum number of allowed iterations
+    optimset.max_eval = 1500; // maximum number of allowed function evaluations
+    optimset.verbose = 0;     // toggle verbose output during minimization
 
-//     // printf("%f, %d", optimset.tolf, optimset.max_iter);
-//     // printf("tamanho y: %d", params.y.size());
-//     point_t solution;
-//     nelder_mead(n + 1, &start, &solution, &MinimizeFHVSMMixture, &params, &optimset);
+    point_t solution;
+    nelder_mead(ncomp + 1, &start, &solution, &MinimizeFHVSMMixture, &params, &optimset);
 
-//     vector<double> result(n, 0.0);
-//     for (int i = 0; i < n; i++)
-//     {
-//         result[i] = solution.x[i] * solution.x[n];
-//         printf("result[%d]: %f \t", i, solution.x[i]);
-//     }
-//     printf("result[%d]: %f \t", n, solution.x[n]);
-//     printf("f(x) = %e\n", solution.fx);
+    std::vector<double> result(ncomp, 0.0);
+    for (int i = 0; i < ncomp; i++)
+    {
+        result[i] = solution.x[i] * solution.x[ncomp];
+    }
 
-//     return result;
-// }
+    return result;
+}

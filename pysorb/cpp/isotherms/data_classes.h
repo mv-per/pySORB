@@ -4,6 +4,13 @@
 #include <string>
 #include <optional>
 
+struct MixtureOptimizationArguments
+{
+    double Pressure;
+    std::vector<double> BulkComposition;
+    std::vector<std::vector<double>> Parameters;
+};
+
 class Fluid
 {
 
