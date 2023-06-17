@@ -1,35 +1,34 @@
 #include "_base_isotherm_model.h"
 
-BaseIsothermModel::BaseIsothermModel(std::string isotherm)
+double BaseIsothermModel::GetPureLoading(double Pressure, double Temperature, std::vector<double> Parameters)
 {
-    if ((std::find(this->PureModels.begin(), this->PureModels.end(), isotherm)) != this->PureModels.end())
+    if (this->PureLoadingInvoker)
     {
-        this->PureLoadingInvoker = this->GetPureLoadingInvoker(isotherm);
-    }
-    else if ((std::find(this->MixtureModels.begin(), this->MixtureModels.end(), isotherm)) != this->MixtureModels.end())
-    {
-        this->MixtureLoadingInvoker = this->GetMixtureLoadingInvoker(isotherm);
+        return this->PureLoadingInvoker(Pressure, Temperature, Parameters);
     }
     else
     {
-        std::invalid_argument("Isotherm not found.");
+        throw std::runtime_error("PureLoadingInvoker not defined");
     }
-}
-
-double BaseIsothermModel::GetPureLoading(double Pressure, double Temperature, std::vector<double> Parameters)
-{
-    return this->PureLoadingInvoker(Pressure, Temperature, Parameters);
 }
 
 std::vector<double> BaseIsothermModel::GetPureLoadings(std::vector<double> Pressures, double Temperature, std::vector<double> Parameters)
 {
-    std::vector<double> CalculatedLoadings(Pressures.size(), 0.0);
 
-    for (std::size_t i = 0; i < Pressures.size(); i++)
+    if (this->PureLoadingInvoker)
     {
-        CalculatedLoadings[i] = this->PureLoadingInvoker(Pressures[i], Temperature, Parameters);
+        std::vector<double> CalculatedLoadings(Pressures.size(), 0.0);
+
+        for (std::size_t i = 0; i < Pressures.size(); i++)
+        {
+            CalculatedLoadings[i] = this->PureLoadingInvoker(Pressures[i], Temperature, Parameters);
+        }
+        return CalculatedLoadings;
     }
-    return CalculatedLoadings;
+    else
+    {
+        throw std::runtime_error("PureLoadingInvoker not defined");
+    }
 }
 
 double BaseIsothermModel::GetDeviation(std::vector<double> Pressures, std::vector<double> ExperimentalLoadings, double Temperature, std::vector<double> Parameters, std::string DeviationEquation)
@@ -38,4 +37,16 @@ double BaseIsothermModel::GetDeviation(std::vector<double> Pressures, std::vecto
     std::function<double(std::vector<double>, std::vector<double>)> DeviationInvoker = GetDeviationInvoker(DeviationEquation, Parameters.size());
 
     return DeviationInvoker(ExperimentalLoadings, CalculatedLoadings);
+}
+
+std::vector<double> BaseIsothermModel::GetMixtureLoading(double Pressure, double Temperature, std::vector<double> BulkComposition, std::vector<std::vector<double>> Parameters)
+{
+    if (this->MixtureLoadingInvoker)
+    {
+        return this->MixtureLoadingInvoker(Pressure, Temperature, BulkComposition, Parameters);
+    }
+    else
+    {
+        throw std::runtime_error("MixtureLoadingInvoker not defined");
+    }
 }

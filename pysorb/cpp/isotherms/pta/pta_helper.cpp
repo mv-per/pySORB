@@ -1,6 +1,6 @@
 #include "helpers.h"
 #include "pta_helper.h"
-#include "equations_of_state/eos.h"
+#include "../equations_of_state/eos.h"
 
 /**
  * Returns a new set of adsorbed fractions for a specific Pz

@@ -17,7 +17,12 @@ public:
      * @brief Constructs a ClassicIsotherms object and initializes the IsothermInvoker based on the given isotherm name.
      * @param isotherm The name of the isotherm to be used.
      */
-    ClassicIsotherms(std::string isotherm);
+    ClassicIsotherms(std::string isotherm)
+    {
+        this->SetupLoadingInvoker(isotherm);
+    }
+
+    void SetupLoadingInvoker(std::string isotherm) override;
 
     /**
      * @brief Returns the appropriate loading invoker function based on the given model name.
@@ -25,7 +30,7 @@ public:
      * @return The corresponding isotherm invoker function.
      * @throw std::invalid_argument If the isotherm is not found or defined.
      */
-    std::function<double(double, double, std::vector<double>)> GetPureLoadingInvoker(std::string isotherm);
+    std::function<double(double, double, std::vector<double>)> GetPureLoadingInvoker(std::string isotherm) override;
 
     /**
      * @brief Returns the appropriate loading invoker function based on the given model name.
@@ -33,7 +38,7 @@ public:
      * @return The corresponding isotherm invoker function.
      * @throw std::invalid_argument If the isotherm is not found or defined.
      */
-    std::function<std::vector<double>(double, double, std::vector<double>, std::vector<std::vector<double>>)> GetMixtureLoadingInvoker(std::string isotherm);
+    std::function<std::vector<double>(double, double, std::vector<double>, std::vector<std::vector<double>>)> GetMixtureLoadingInvoker(std::string isotherm) override;
 
 private:
     std::vector<std::string> PureModels =
@@ -47,6 +52,7 @@ private:
             "freundlich-2",
             "freundlich",
             "keller-staudt-toth",
+            "jensen-seaton",
         };
 
     std::vector<std::string> MixtureModels =

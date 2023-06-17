@@ -77,3 +77,8 @@ std::function<double(std::vector<double>, std::vector<double>)> GetDeviationInvo
         };
     }
 };
+
+void printString(std::string val)
+{
+    std::cout << val << std::endl;
+}

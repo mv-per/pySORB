@@ -14,12 +14,13 @@
 class BaseIsothermModel
 {
 public:
-    BaseIsothermModel(){};
     /**
      * @brief Constructs a BaseIsothermModel object and initializes the IsothermInvoker based on the given isotherm name.
      * @param isotherm The name of the isotherm to be used.
      */
-    BaseIsothermModel(std::string model);
+    BaseIsothermModel(){};
+
+    virtual void SetupLoadingInvoker(std::string model) = 0;
 
     /**
      * @brief Calculates the loading for the given pressure, temperature, and parameters.
@@ -46,16 +47,7 @@ public:
      * @param Parameters The parameters for the isotherm.
      * @return The calculated loading.
      */
-    std::vector<double> GetMixtureLoading(double Pressure, double Temperature, std::vector<double> BulkComposition, std::vector<double> Parameters);
-
-    /**
-     * @brief Calculates the loadings for the given pressures, temperature, bulk composition and parameters.
-     * @param Pressures The vector of pressure values.
-     * @param Temperature The temperature value.
-     * @param Parameters The parameters for the isotherm.
-     * @return The vector of calculated loadings.
-     */
-    std::vector<std::vector<double>> GetMixtureLoadings(std::vector<double> Pressures, double Temperature, std::vector<std::vector<double>> BulkComposition, std::vector<double> Parameters);
+    std::vector<double> GetMixtureLoading(double Pressure, double Temperature, std::vector<double> BulkComposition, std::vector<std::vector<double>> Parameters);
 
     /**
      * @brief Calculates the deviation between experimental loadings and calculated loadings using the specified deviation function.
@@ -68,28 +60,26 @@ public:
      */
     double GetDeviation(std::vector<double> Pressures, std::vector<double> ExperimentalLoadings, double Temperature, std::vector<double> Parameters, std::string DeviationEquation);
 
-protected:
+    /**
+     * @brief Returns the appropriate loading invoker function based on the given model name.
+     * @param isotherm The name of the isotherm.
+     * @return The corresponding isotherm invoker function.
+     * @throw std::invalid_argument If the isotherm is not found or defined.
+     */
+    virtual std::function<double(double, double, std::vector<double>)> GetPureLoadingInvoker(std::string isotherm) = 0;
+
+    /**
+     * @brief Returns the appropriate loading invoker function based on the given model name.
+     * @param isotherm The name of the isotherm.
+     * @return The corresponding isotherm invoker function.
+     * @throw std::invalid_argument If the isotherm is not found or defined.
+     */
+    virtual std::function<std::vector<double>(double, double, std::vector<double>, std::vector<std::vector<double>>)> GetMixtureLoadingInvoker(std::string isotherm) = 0;
+
     std::function<double(double, double, std::vector<double>)> PureLoadingInvoker;
     std::function<std::vector<double>(double, double, std::vector<double>, std::vector<std::vector<double>>)> MixtureLoadingInvoker;
-
     std::vector<std::string> PureModels = {};
     std::vector<std::string> MixtureModels = {};
-
-    /**
-     * @brief Returns the appropriate loading invoker function based on the given model name.
-     * @param isotherm The name of the isotherm.
-     * @return The corresponding isotherm invoker function.
-     * @throw std::invalid_argument If the isotherm is not found or defined.
-     */
-    std::function<double(double, double, std::vector<double>)> GetPureLoadingInvoker(std::string isotherm);
-
-    /**
-     * @brief Returns the appropriate loading invoker function based on the given model name.
-     * @param isotherm The name of the isotherm.
-     * @return The corresponding isotherm invoker function.
-     * @throw std::invalid_argument If the isotherm is not found or defined.
-     */
-    std::function<std::vector<double>(double, double, std::vector<double>, std::vector<std::vector<double>>)> GetMixtureLoadingInvoker(std::string isotherm);
 };
 
 #endif

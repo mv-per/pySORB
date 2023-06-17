@@ -1,7 +1,6 @@
 #include "classic_isotherms.h"
 
-std::function<double(double, double, std::vector<double>)>
-ClassicIsotherms::GetPureLoadingInvoker(std::string isotherm)
+std::function<double(double, double, std::vector<double>)> ClassicIsotherms::GetPureLoadingInvoker(std::string isotherm)
 {
     if (isotherm == "langmuir")
     {
@@ -66,9 +65,19 @@ ClassicIsotherms::GetPureLoadingInvoker(std::string isotherm)
             return keller_staudt_toth(pressure, parameters);
         };
     }
+    else if (isotherm == "jensen-seaton")
+    {
+        return [=](double pressure, double temperature, std::vector<double> parameters)
+        {
+            return jensen_seaton(pressure, parameters);
+        };
+    }
     else
     {
-        throw std::invalid_argument("Isotherm not found/defined in the pure isotherms. If you want to calculate mixture please set pure=false.");
+        return [=](double, double, std::vector<double>) -> double
+        {
+            throw std::runtime_error("Isotherm not found/defined in the pure isotherms. If you want to calculate mixture please set pure=false.");
+        };
     }
 }
 
@@ -84,5 +93,21 @@ std::function<std::vector<double>(double, double, std::vector<double>, std::vect
     else
     {
         throw std::invalid_argument("Isotherm not found/defined in the Mixture isotherms.");
+    }
+}
+
+void ClassicIsotherms::SetupLoadingInvoker(std::string isotherm)
+{
+    if ((std::find(this->PureModels.begin(), this->PureModels.end(), isotherm)) != this->PureModels.end())
+    {
+        this->PureLoadingInvoker = this->GetPureLoadingInvoker(isotherm);
+    }
+    else if ((std::find(this->MixtureModels.begin(), this->MixtureModels.end(), isotherm)) != this->MixtureModels.end())
+    {
+        this->MixtureLoadingInvoker = this->GetMixtureLoadingInvoker(isotherm);
+    }
+    else
+    {
+        std::invalid_argument("Isotherm not found.");
     }
 }
