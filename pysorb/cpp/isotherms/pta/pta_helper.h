@@ -9,7 +9,7 @@
 
 typedef std::function<double(double, std::vector<double>)> call_potential;
 
-typedef std::function<double(std::size_t, double, Fluid)> call_potential_mix;
+typedef std::function<double(double, Fluid, std::vector<double>)> call_potential_mix;
 
 typedef std::function<double(double, double, std::vector<double>, call_mono_eos, call_potential)> call_mono_get_load;
 

@@ -10,6 +10,7 @@
 #include "../equations_of_state/eos.h"
 #include "../data_classes.h"
 #include "pta_pure.h"
+#include "pta_mixture.h"
 
 class PotentialTheoryModels : public BaseIsothermModel
 {
