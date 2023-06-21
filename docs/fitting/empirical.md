@@ -1,0 +1,9 @@
+# Empirical
+
+:::{card} Card Title
+Header
+^^^
+Card content
++++
+Footer
+:::
