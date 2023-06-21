@@ -1,6 +1,6 @@
 #include "classic_isotherms.h"
 
-std::function<double(double, double, std::vector<double>)> ClassicIsotherms::GetPureLoadingInvoker(std::string isotherm)
+std::function<double(double, double, std::vector<double>)> EmpiricalIsotherms::GetPureLoadingInvoker(std::string isotherm)
 {
     if (isotherm == "langmuir")
     {
@@ -81,7 +81,7 @@ std::function<double(double, double, std::vector<double>)> ClassicIsotherms::Get
     }
 }
 
-std::function<std::vector<double>(double, double, std::vector<double>, std::vector<std::vector<double>>)> ClassicIsotherms::GetMixtureLoadingInvoker(std::string isotherm)
+std::function<std::vector<double>(double, double, std::vector<double>, std::vector<std::vector<double>>)> EmpiricalIsotherms::GetMixtureLoadingInvoker(std::string isotherm)
 {
     if (isotherm == "extended-langmuir")
     {
@@ -96,7 +96,7 @@ std::function<std::vector<double>(double, double, std::vector<double>, std::vect
     }
 }
 
-void ClassicIsotherms::SetupInvokers()
+void EmpiricalIsotherms::SetupInvokers()
 {
     if ((std::find(this->PureModels.begin(), this->PureModels.end(), this->Isotherm)) != this->PureModels.end())
     {

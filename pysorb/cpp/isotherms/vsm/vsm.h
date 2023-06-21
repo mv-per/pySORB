@@ -1,5 +1,5 @@
-#ifndef CLASSIC_ISOTHERM_H
-#define CLASSIC_ISOTHERM_H
+#ifndef VSM_H
+#define VSM_H
 
 #include <string>
 #include <vector>

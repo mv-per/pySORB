@@ -81,4 +81,12 @@ double GetCHI2Deviation(std::vector<double> ExperimentalLoadings, std::vector<do
  */
 double GetRSDeviation(std::vector<double> ExperimentalLoadings, std::vector<double> CalculatedLoadings, double NumberOfParameters);
 
+/**
+ * @brief Calculates the R-squared (RS) deviation.
+ * @param ExperimentalLoadings The vector of experimental loadings.
+ * @param CalculatedLoadings The vector of calculated loadings.
+ * @param NumberOfParameters The number of parameters in the model.
+ * @return The RS deviation.
+ */
+double GetRABSDeviation(std::vector<double> ExperimentalLoadings, std::vector<double> CalculatedLoadings, double NumberOfParameters);
 #endif

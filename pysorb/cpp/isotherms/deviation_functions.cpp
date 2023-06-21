@@ -34,6 +34,18 @@ double GetAREDeviation(std::vector<double> ExperimentalLoadings, std::vector<dou
     return 100.0 / double(ExperimentalLoadings.size()) * deviation;
 }
 
+double GetRABSDeviation(std::vector<double> ExperimentalLoadings, std::vector<double> CalculatedLoadings, double NumberOfParameters)
+{
+    double deviation = 0;
+
+    for (std::size_t i = 0; i < ExperimentalLoadings.size(); i++)
+    {
+        deviation += std::fabs(ExperimentalLoadings[i] - CalculatedLoadings[i]) / ExperimentalLoadings[i];
+    }
+
+    return deviation;
+}
+
 double GetEABSDeviation(std::vector<double> ExperimentalLoadings, std::vector<double> CalculatedLoadings, double NumberOfParameters)
 {
     double deviation = 0;

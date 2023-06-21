@@ -3,13 +3,13 @@
 
 double getLoading(std::string isotherm, std::vector<double> parameters)
 {
-    ClassicIsotherms IsothermModel = ClassicIsotherms(isotherm);
+    EmpiricalIsotherms IsothermModel = EmpiricalIsotherms(isotherm);
     return IsothermModel.GetPureLoading(10, 298.15, parameters);
 }
 
 std::vector<double> getLoadings(std::string isotherm, std::vector<double> parameters)
 {
-    ClassicIsotherms IsothermModel = ClassicIsotherms(isotherm);
+    EmpiricalIsotherms IsothermModel = EmpiricalIsotherms(isotherm);
     return IsothermModel.GetPureLoadings({10, 20, 30, 40}, 298.15, parameters);
 }
 
@@ -58,7 +58,7 @@ TEST(test_classics, GetLoadings)
 
 TEST(test_classics, GetDeviation)
 {
-    ClassicIsotherms IsothermModel = ClassicIsotherms("langmuir");
+    EmpiricalIsotherms IsothermModel = EmpiricalIsotherms("langmuir");
 
     std::vector<std::string> deviationFunctions = {"ARE", "SSE", "EABS", "HYBRID", "MPSD", "SORE", "CHI_2", "R_S"};
     std::vector<double> expectedDeviations = {-77.20797, 41.56132, 11.11965, 189.48791, 296.04621, 75.15154, 8.76433, -19.78066};
@@ -71,7 +71,7 @@ TEST(test_classics, GetDeviation)
 
 TEST(test_classics, GetMixtureLoading)
 {
-    ClassicIsotherms IsothermModel = ClassicIsotherms("extended-langmuir");
+    EmpiricalIsotherms IsothermModel = EmpiricalIsotherms("extended-langmuir");
 
     std::vector<double> loadings = IsothermModel.GetMixtureLoading(10, 298.15, {0.3, 0.7}, {{10, 0.05}, {6, 0.08}});
     std::vector<double> expectedLoadings = {0.631578, 2.3578};

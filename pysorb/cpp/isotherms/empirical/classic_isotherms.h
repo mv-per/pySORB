@@ -1,5 +1,5 @@
-#ifndef CLASSIC_ISOTHERM_H
-#define CLASSIC_ISOTHERM_H
+#ifndef EMPIRICAL_ISOTHERM_H
+#define EMPIRICAL_ISOTHERM_H
 
 #include <string>
 #include <vector>
@@ -10,14 +10,14 @@
 #include "../utils.h"
 #include "../_base_isotherm_model.h"
 
-class ClassicIsotherms : public BaseIsothermModel
+class EmpiricalIsotherms : public BaseIsothermModel
 {
 public:
     /**
-     * @brief Constructs a ClassicIsotherms object and initializes the IsothermInvoker based on the given isotherm name.
+     * @brief Constructs a EmpiricalIsotherms object and initializes the IsothermInvoker based on the given isotherm name.
      * @param isotherm The name of the isotherm to be used.
      */
-    ClassicIsotherms(std::string isotherm)
+    EmpiricalIsotherms(std::string isotherm)
     {
         this->Isotherm = isotherm;
         this->SetupInvokers();

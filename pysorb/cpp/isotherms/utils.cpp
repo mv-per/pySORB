@@ -34,6 +34,13 @@ std::function<double(std::vector<double>, std::vector<double>)> GetDeviationInvo
             return GetEABSDeviation(ExperimentalLoadings, CalculatedLoadings, NumberOfParameters);
         };
     }
+    else if (DeviationEquation == "RABS")
+    {
+        return [=](std::vector<double> ExperimentalLoadings, std::vector<double> CalculatedLoadings)
+        {
+            return GetRABSDeviation(ExperimentalLoadings, CalculatedLoadings, NumberOfParameters);
+        };
+    }
     else if (DeviationEquation == "HYBRID")
     {
         return [=](std::vector<double> ExperimentalLoadings, std::vector<double> CalculatedLoadings)
