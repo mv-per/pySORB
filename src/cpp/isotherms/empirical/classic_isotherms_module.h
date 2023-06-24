@@ -9,7 +9,12 @@ void bindEmpiricalIsotherms(pybind11::module &m) {
 
   pybind11::class_<EmpiricalIsotherms, BaseIsothermModel>(
       m, "EmpiricalIsotherms", pybind11::multiple_inheritance())
-      .def(pybind11::init<std::string>(), pybind11::arg("model"));
+      .def(pybind11::init<std::string>(), pybind11::arg("model"),
+           R"(
+        Initializes as EmpiricalIsotherms
+
+        :param model: The Activity coefficient method, Empirical Isotherms Section
+      )");
 }
 
 #endif

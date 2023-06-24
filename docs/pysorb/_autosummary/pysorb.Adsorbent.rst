@@ -1,4 +1,4 @@
-pysorb.Adsorbent
+﻿pysorb.Adsorbent
 ================
 
 .. currentmodule:: pysorb
@@ -18,5 +18,14 @@ pysorb.Adsorbent
    
 
    
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      ~Adsorbent.atomic_density
+      ~Adsorbent.name
+      ~Adsorbent.solid_diameter
    
    

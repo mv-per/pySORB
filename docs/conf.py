@@ -39,11 +39,16 @@ extensions = [
     "breathe",
     "myst_parser",
     "nbsphinx",
-    "sphinx_rtd_theme",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
+]
+
+myst_enable_extensions = [
+    "amsmath",
+    "dollarmath",
+    "attrs_inline",
 ]
 
 autoclass_content = "class"
@@ -75,5 +80,5 @@ myst_update_mathjax = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "furo"
 
