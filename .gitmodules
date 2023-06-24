@@ -1,6 +1,6 @@
-[submodule "pybind11"]
+[submodule "ext/pybind11"]
 	path = ext/pybind11
 	url = https://github.com/pybind/pybind11.git
-[submodule "pysorb/cpp/googletest"]
+[submodule "ext/googletest"]
 	path = ext/googletest
 	url = https://github.com/google/googletest.git
