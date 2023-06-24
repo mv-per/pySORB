@@ -12,34 +12,40 @@ set(This pysorb)
 
 project(${This})
 
-include_directories("${CMAKE_SOURCE_DIR}/pysorb/cpp/isotherms")
-include_directories("${CMAKE_SOURCE_DIR}/pysorb/cpp/isotherms/optimization_algorithms")
-include_directories("${CMAKE_SOURCE_DIR}/pysorb/cpp/isotherms/equations_of_state")
+include_directories("${CMAKE_SOURCE_DIR}/src/cpp/isotherms")
+include_directories("${CMAKE_SOURCE_DIR}/src/cpp/isotherms/optimization_algorithms")
+include_directories("${CMAKE_SOURCE_DIR}/src/cpp/isotherms/equations_of_state")
 
-file (GLOB Sources "pysorb/cpp/isotherms/*.cpp")
-file (GLOB EmpiricalSources "pysorb/cpp/isotherms/empirical/*.cpp")
-file (GLOB OptimizationSources "pysorb/cpp/isotherms/optimization_algorithms/*.cpp")
-file (GLOB PotentialSources "pysorb/cpp/isotherms/pta/*.cpp")
-file (GLOB VacancySources "pysorb/cpp/isotherms/vsm/*.cpp")
-file (GLOB VacancySourcesActivity "pysorb/cpp/isotherms/vsm/activity_coefficients/*.cpp")
-file (GLOB EoSSources "pysorb/cpp/isotherms/equations_of_state/*.cpp")
+file (GLOB Sources "src/cpp/isotherms/*.cpp")
+file (GLOB EmpiricalSources "src/cpp/isotherms/empirical/*.cpp")
+file (GLOB EmpiricalFilesSources "src/cpp/isotherms/empirical/files/*.cpp")
+file (GLOB OptimizationSources "src/cpp/isotherms/optimization_algorithms/*.cpp")
+file (GLOB PotentialSources "src/cpp/isotherms/pta/*.cpp")
+file (GLOB PotentialFilesSources "src/cpp/isotherms/pta/files/*.cpp")
+file (GLOB VacancySources "src/cpp/isotherms/vsm/*.cpp")
+file (GLOB VacancySourcesActivity "src/cpp/isotherms/vsm/activity_coefficients/*.cpp")
+file (GLOB EoSSources "src/cpp/isotherms/equations_of_state/*.cpp")
 
-file (GLOB Headers "pysorb/cpp/isotherms/*.cpp")
-file (GLOB EmpiricalHeaders "pysorb/cpp/isotherms/empirical/*.cpp")
-file (GLOB OptimizationHeaders "pysorb/cpp/isotherms/optimization_algorithms/*.cpp")
-file (GLOB PotentialHeaders "pysorb/cpp/isotherms/pta/*.cpp")
-file (GLOB VacancyHeaders "pysorb/cpp/isotherms/vsm/*.cpp")
-file (GLOB VacancyHeadersActivity "pysorb/cpp/isotherms/vsm/activity_coefficients/*.cpp")
-file (GLOB EoSHeaders "pysorb/cpp/isotherms/equations_of_state/*.cpp")
+file (GLOB Headers "src/cpp/isotherms/*.cpp")
+file (GLOB EmpiricalHeaders "src/cpp/isotherms/empirical/*.cpp")
+file (GLOB EmpiricalFilesHeaders "src/cpp/isotherms/empirical/files/*.cpp")
+file (GLOB OptimizationHeaders "src/cpp/isotherms/optimization_algorithms/*.cpp")
+file (GLOB PotentialHeaders "src/cpp/isotherms/pta/*.cpp")
+file (GLOB PotentialFilesHeaders "src/cpp/isotherms/pta/files/*.cpp")
+file (GLOB VacancyHeaders "src/cpp/isotherms/vsm/*.cpp")
+file (GLOB VacancyHeadersActivity "src/cpp/isotherms/vsm/activity_coefficients/*.cpp")
+file (GLOB EoSHeaders "src/cpp/isotherms/equations_of_state/*.cpp")
 
 find_package(Python COMPONENTS Interpreter Development)
-add_subdirectory(pybind11)
+add_subdirectory(ext/pybind11)
 
 pybind11_add_module(
     ${This} 
     ${Sources} 
     ${OptimizationSources}
      ${EmpiricalSources} 
+     ${EmpiricalFilesSources} 
+     ${PotentialFilesSources} 
      ${PotentialSources} 
      ${VacancySources} 
      ${VacancySourcesActivity} 
@@ -47,11 +53,13 @@ pybind11_add_module(
     ${Headers} 
     ${OptimizationHeaders}
      ${EmpiricalHeaders} 
+     ${EmpiricalFilesHeaders} 
      ${PotentialHeaders} 
+     ${PotentialFilesHeaders} 
      ${VacancyHeaders} 
      ${VacancyHeadersActivity} 
      ${EoSHeaders}
-    pysorb/module.cpp)
+    src/pysorb.cpp)
 
 target_link_libraries(${This} PUBLIC)
 
