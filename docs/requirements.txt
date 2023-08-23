@@ -1,7 +1,7 @@
 breathe
 nbsphinx
-sphinx==6.2.1
-sphinx-design==0.4.1
-sphinx-autoapi==2.1.0
-myst-parser==2.0.0
+sphinx
+sphinx-design
+sphinx-autoapi
+myst-parser
 furo
