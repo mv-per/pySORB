@@ -74,6 +74,7 @@ breathe_default_project = "pysorb"
 breathe_default_members = ("members", "undoc-members")
 
 myst_update_mathjax = False
+myst_dmath_double_inline = True
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -82,3 +83,4 @@ myst_update_mathjax = False
 #
 html_theme = "furo"
 
+source_suffix = ['.rst', '.md']
